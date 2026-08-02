@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+:root {
+  /* Warm food-rescue palette */
+  --cream: #f7f1e6;
+  --cream-deep: #efe4d2;
+  --green-50: #eef5ea;
+  --green-100: #d8e8cf;
+  --green-500: #3f6b3a;
+  --green-600: #2f5430;
+  --green-700: #244226;
+  --amber-400: #e0a84a;
+  --amber-500: #c8892d;
+  --amber-600: #a46c1c;
+  --ink: #1f2a1c;
+  --ink-muted: #5c6658;
+  --surface: #fffaf2;
+  --border: #d9cbb4;
+  --danger: #b1432f;
+  --success: #3f6b3a;
+
+  --background: var(--cream);
+  --foreground: var(--ink);
+
+  --background-gradient: linear-gradient(
+      165deg,
+      #faf6ee 0%,
+      #f3ead8 42%,
+      #e8f0e3 100%
+    ),
+    radial-gradient(
+      ellipse 80% 50% at 10% 0%,
+      rgba(216, 232, 207, 0.55),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 60% 40% at 90% 10%,
+      rgba(224, 168, 74, 0.14),
+      transparent 50%
+    );
+
+  --pattern-dots: radial-gradient(
+    rgba(47, 84, 48, 0.06) 0.7px,
+    transparent 0.7px
+  );
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-cream: var(--cream);
+  --color-cream-deep: var(--cream-deep);
+  --color-green-50: var(--green-50);
+  --color-green-100: var(--green-100);
+  --color-green-500: var(--green-500);
+  --color-green-600: var(--green-600);
+  --color-green-700: var(--green-700);
+  --color-amber-400: var(--amber-400);
+  --color-amber-500: var(--amber-500);
+  --color-amber-600: var(--amber-600);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --font-sans: var(--font-source-sans);
+  --font-display: var(--font-fraunces);
+}
+
+body {
+  min-height: 100vh;
+  color: var(--foreground);
+  background-color: var(--background);
+  background-image: var(--pattern-dots), var(--background-gradient);
+  background-size: 18px 18px, auto, auto, auto;
+  background-attachment: fixed;
+  font-family: var(--font-source-sans), ui-sans-serif, sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-fraunces), ui-serif, Georgia, serif;
+  color: var(--green-700);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: var(--green-600);
+}
+
+::selection {
+  background: var(--green-100);
+  color: var(--ink);
+}
