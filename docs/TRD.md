@@ -32,7 +32,7 @@ Browser ──► Leaflet / OSM tiles
 | Styling | Tailwind CSS + CSS variables |
 | ORM / DB | Prisma + SQLite (`prisma/dev.db`); schema portable to Postgres |
 | Auth | Auth.js (NextAuth) Credentials provider + `role` on User; seeded demo users |
-| Vision | `@google/generative-ai` with Gemini Flash vision model |
+| Vision | Local Food-101 classifier via `@huggingface/transformers` (ONNX) |
 | Maps | `leaflet` + `react-leaflet` |
 | Routing | OSRM HTTP API from server route |
 | Validation | Zod |
@@ -148,7 +148,7 @@ model Claim {
 }
 ```
 
-If `GEMINI_API_KEY` is missing or the model fails: heuristic fallback, `confidence: 0`, `offline: true`.
+If the local Food-101 model fails to load/run: heuristic fallback, `confidence: 0`, `offline: true`.
 
 ### `POST /api/listings`
 
@@ -235,7 +235,7 @@ Prisma interactive transaction:
 ```bash
 DATABASE_URL="file:./dev.db"
 AUTH_SECRET="generate-a-long-random-string"
-GEMINI_API_KEY=""                          # optional; offline fallback if empty
+# Vision is local Food-101 (no cloud key). Optional VISION_* rate-limit envs in .env.example.
 NEXT_PUBLIC_DEFAULT_CITY_LAT=38.2527
 NEXT_PUBLIC_DEFAULT_CITY_LNG=-85.7585
 ```

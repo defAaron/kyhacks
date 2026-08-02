@@ -57,7 +57,7 @@ export const visionResultSchema = z.object({
   suggestedQuantity: z.number().int().positive(),
   confidence: z.number().min(0).max(1),
   offline: z.boolean(),
-  /** Set when Gemini was skipped to protect API budget. */
+  /** Set when vision was skipped (session/quota) and donor should enter manually. */
   rateLimited: z.boolean().optional(),
 });
 

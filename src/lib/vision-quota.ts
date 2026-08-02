@@ -8,14 +8,14 @@ import {
 } from "@/lib/rate-limit";
 
 /**
- * Gemini call budget. Checked before every paid Vision request.
- * Daily counters persist under `.data/` so restarts do not reset the bill cap.
+ * Local vision call budget (CPU / abuse guard). Checked before each classify.
+ * Daily counters persist under `.data/` so restarts do not reset caps.
  */
 
 const MS_MINUTE = 60_000;
 const MS_HOUR = 60 * MS_MINUTE;
 const USAGE_DIR = path.join(process.cwd(), ".data");
-const USAGE_FILE = path.join(USAGE_DIR, "gemini-quota.json");
+const USAGE_FILE = path.join(USAGE_DIR, "vision-quota.json");
 
 type DailyUsage = {
   /** UTC calendar day YYYY-MM-DD */
@@ -40,21 +40,39 @@ export type VisionQuotaResult =
       message: string;
     };
 
-function envInt(name: string, fallback: number): number {
-  const raw = process.env[name]?.trim();
-  if (!raw) return fallback;
-  const n = Number.parseInt(raw, 10);
-  return Number.isFinite(n) && n >= 0 ? n : fallback;
+function envIntPrefer(...names: [string, ...string[]]): number | undefined {
+  for (const name of names) {
+    const raw = process.env[name]?.trim();
+    if (!raw) continue;
+    const n = Number.parseInt(raw, 10);
+    if (Number.isFinite(n) && n >= 0) return n;
+  }
+  return undefined;
 }
 
 /** Conservative defaults — override via env for demos that need more headroom. */
 export function getVisionQuotaLimits() {
   return {
-    minIntervalMs: envInt("GEMINI_MIN_INTERVAL_MS", 3_000),
-    perUserPerMinute: envInt("GEMINI_MAX_PER_USER_PER_MINUTE", 3),
-    perUserPerHour: envInt("GEMINI_MAX_PER_USER_PER_HOUR", 10),
-    perUserPerDay: envInt("GEMINI_MAX_PER_USER_PER_DAY", 20),
-    globalPerDay: envInt("GEMINI_MAX_GLOBAL_PER_DAY", 50),
+    minIntervalMs:
+      envIntPrefer("VISION_MIN_INTERVAL_MS", "GEMINI_MIN_INTERVAL_MS") ?? 3_000,
+    perUserPerMinute:
+      envIntPrefer(
+        "VISION_MAX_PER_USER_PER_MINUTE",
+        "GEMINI_MAX_PER_USER_PER_MINUTE",
+      ) ?? 3,
+    perUserPerHour:
+      envIntPrefer(
+        "VISION_MAX_PER_USER_PER_HOUR",
+        "GEMINI_MAX_PER_USER_PER_HOUR",
+      ) ?? 10,
+    perUserPerDay:
+      envIntPrefer(
+        "VISION_MAX_PER_USER_PER_DAY",
+        "GEMINI_MAX_PER_USER_PER_DAY",
+      ) ?? 40,
+    globalPerDay:
+      envIntPrefer("VISION_MAX_GLOBAL_PER_DAY", "GEMINI_MAX_GLOBAL_PER_DAY") ??
+      200,
   };
 }
 

@@ -5,6 +5,10 @@ import {
   VISION_MAX_BYTES,
 } from "@/lib/vision";
 
+export const runtime = "nodejs";
+/** First request may download + load the local Food-101 ONNX weights. */
+export const maxDuration = 120;
+
 const ALLOWED_MIME = new Set([
   "image/jpeg",
   "image/jpg",
@@ -18,7 +22,7 @@ const ALLOWED_MIME = new Set([
 /**
  * POST /api/vision/analyze
  * Donor-only multipart upload field `image` (max 5MB).
- * Returns schema-valid vision JSON; offline fallback when Gemini unavailable.
+ * Returns schema-valid vision JSON from local Food-101; offline fallback on failure.
  */
 export async function POST(request: Request) {
   const session = await auth();

@@ -53,5 +53,6 @@ next-env.d.ts
 /public/uploads/*
 !/public/uploads/.gitkeep
 
-# persisted Gemini daily quota counters
+# persisted vision daily quota counters + local model cache
 /.data/
+/.cache/
