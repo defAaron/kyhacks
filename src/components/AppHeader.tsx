@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { auth, signOut } from "@/lib/auth";
+import { Button, buttonClassName } from "@/components/ui";
 
 const navLinks = [
   { href: "/explore", label: "Explore" },
@@ -14,7 +15,11 @@ function NavLinks({ className }: { className?: string }) {
         <Link
           key={href}
           href={href}
-          className={`rounded-md px-3 py-2 text-sm font-medium text-ink-muted transition-colors hover:bg-green-50 hover:text-green-600 ${className ?? ""}`}
+          className={buttonClassName({
+            variant: "ghost",
+            size: "sm",
+            className: `min-h-11 px-3 ${className ?? ""}`,
+          })}
         >
           {label}
         </Link>
@@ -23,7 +28,13 @@ function NavLinks({ className }: { className?: string }) {
   );
 }
 
-function AuthControl({ isLoggedIn }: { isLoggedIn: boolean }) {
+function AuthControl({
+  isLoggedIn,
+  className,
+}: {
+  isLoggedIn: boolean;
+  className?: string;
+}) {
   if (isLoggedIn) {
     return (
       <form
@@ -32,12 +43,14 @@ function AuthControl({ isLoggedIn }: { isLoggedIn: boolean }) {
           await signOut({ redirectTo: "/" });
         }}
       >
-        <button
+        <Button
           type="submit"
-          className="rounded-md px-3 py-2 text-sm font-medium text-ink-muted transition-colors hover:bg-green-50 hover:text-green-600"
+          variant="ghost"
+          size="sm"
+          className={`min-h-11 px-3 ${className ?? ""}`}
         >
           Logout
-        </button>
+        </Button>
       </form>
     );
   }
@@ -45,7 +58,11 @@ function AuthControl({ isLoggedIn }: { isLoggedIn: boolean }) {
   return (
     <Link
       href="/login"
-      className="rounded-md bg-green-600 px-3 py-2 text-sm font-medium text-surface transition-colors hover:bg-green-700"
+      className={buttonClassName({
+        variant: "primary",
+        size: "sm",
+        className: `min-h-11 px-3 ${className ?? ""}`,
+      })}
     >
       Login
     </Link>
@@ -58,7 +75,7 @@ export async function AppHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-surface/95 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <div className="mx-auto flex h-[3.75rem] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link
           href="/"
           className="font-display text-xl font-semibold tracking-tight text-green-700 transition-colors hover:text-green-600"
@@ -75,18 +92,21 @@ export async function AppHeader() {
         </nav>
 
         <details className="group relative md:hidden">
-          <summary className="cursor-pointer list-none rounded-md border border-border bg-cream px-3 py-2 text-sm font-medium text-ink marker:content-none [&::-webkit-details-marker]:hidden">
+          <summary className="flex min-h-11 cursor-pointer list-none items-center rounded-lg border border-border bg-cream px-3 text-sm font-medium text-ink marker:content-none [&::-webkit-details-marker]:hidden">
             <span className="group-open:hidden">Menu</span>
             <span className="hidden group-open:inline">Close</span>
           </summary>
           <nav
-            className="absolute right-0 top-full z-50 mt-2 min-w-[10rem] rounded-lg border border-border bg-surface p-2 shadow-lg"
+            className="absolute right-0 top-full z-50 mt-2 min-w-[12rem] rounded-lg border border-border bg-surface p-2 shadow-lg"
             aria-label="Mobile navigation"
           >
-            <div className="flex flex-col">
-              <NavLinks className="block w-full text-left" />
+            <div className="flex flex-col gap-0.5">
+              <NavLinks className="w-full justify-start" />
               <div className="mt-1 border-t border-border pt-1">
-                <AuthControl isLoggedIn={isLoggedIn} />
+                <AuthControl
+                  isLoggedIn={isLoggedIn}
+                  className="w-full justify-start"
+                />
               </div>
             </div>
           </nav>

@@ -99,3 +99,139 @@ a {
   background: var(--green-100);
   color: var(--ink);
 }
+
+/* Leaflet: keep map under sticky header; brand-aligned popups */
+.leaflet-container {
+  font: inherit;
+  background: var(--cream-deep);
+}
+
+.surplus-map-pin,
+.surpluslink-map-pin {
+  background: transparent !important;
+  border: none !important;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 16px rgba(31, 42, 28, 0.12);
+  color: var(--ink);
+}
+
+.leaflet-popup-tip {
+  box-shadow: none;
+}
+
+/* Home hero motion */
+@keyframes surplus-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes surplus-hero-drift {
+  from {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.1) translate3d(-1.5%, -1%, 0);
+  }
+}
+
+.surplus-hero-enter {
+  opacity: 0;
+  animation: surplus-fade-up 0.65s ease-out forwards;
+}
+
+.surplus-hero-enter-1 {
+  animation-delay: 0.1s;
+}
+
+.surplus-hero-enter-2 {
+  animation-delay: 0.18s;
+}
+
+.surplus-hero-enter-3 {
+  animation-delay: 0.28s;
+}
+
+.surplus-hero-media {
+  animation: surplus-hero-drift 18s ease-in-out alternate infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surplus-hero-enter {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .surplus-hero-media {
+    animation: none;
+  }
+}
+
+/* Mobile QA (S12.2): comfortable tap targets, map plane, camera capture */
+:root {
+  --tap-min: 2.75rem; /* 44px */
+  --map-min-height: min(55dvh, 28rem);
+}
+
+.tap-target {
+  min-height: var(--tap-min);
+  min-width: var(--tap-min);
+}
+
+/* Leaflet / explore map: fill a predictable height on phones */
+.listings-map,
+.leaflet-container.listings-map {
+  width: 100%;
+  min-height: var(--map-min-height);
+  height: var(--map-min-height);
+  z-index: 0;
+}
+
+@media (min-width: 768px) {
+  .listings-map,
+  .leaflet-container.listings-map {
+    --map-min-height: min(60dvh, 36rem);
+  }
+}
+
+/* iPhone Safari: larger file control + avoid zoom-on-focus (<16px) */
+input[type="file"].camera-input {
+  display: block;
+  width: 100%;
+  min-height: var(--tap-min);
+  font-size: 1rem;
+  padding: 0.5rem 0;
+}
+
+input[type="file"].camera-input::file-selector-button {
+  min-height: var(--tap-min);
+  margin-right: 0.75rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Prevent iOS Safari zooming inputs on focus */
+@media (max-width: 767px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea {
+    font-size: max(1rem, 16px);
+  }
+}

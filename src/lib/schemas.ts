@@ -6,6 +6,22 @@ const latLngSchema = z.object({
   lng: z.number().min(-180).max(180),
 });
 
+/** Donor org profile create/update (PRD § donor profile / S8.1). */
+export const donorProfileSchema = z.object({
+  orgName: z.string().trim().min(1),
+  address: z.string().trim().min(1),
+  lat: z.number().min(-90).max(90),
+  lng: z.number().min(-180).max(180),
+  phone: z
+    .string()
+    .trim()
+    .optional()
+    .nullable()
+    .transform((v) => (v == null || v === "" ? null : v)),
+});
+
+export type DonorProfileInput = z.infer<typeof donorProfileSchema>;
+
 /**
  * POST /api/listings body fields (TRD §5).
  * photoUrl may be a prior upload path/URL; pickup window is coercible datetime.

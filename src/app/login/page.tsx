@@ -7,7 +7,13 @@ export const metadata: Metadata = {
   description: "Sign in to SurplusLink with a demo donor or recipient account.",
 };
 
-export default function LoginPage() {
+type LoginPageProps = {
+  searchParams: Promise<{ callbackUrl?: string }>;
+};
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const { callbackUrl } = await searchParams;
+
   return (
     <main className="mx-auto flex w-full max-w-lg flex-col px-4 py-10 sm:px-6 sm:py-14">
       <div className="mb-8">
@@ -19,7 +25,7 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <LoginForm />
+      <LoginForm callbackUrl={callbackUrl} />
 
       <p className="mt-8 text-center text-sm text-ink-muted">
         Just browsing?{" "}

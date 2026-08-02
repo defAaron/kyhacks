@@ -16,7 +16,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   primary: "bg-green-600 text-surface hover:bg-green-700",
   secondary:
     "border border-border bg-surface text-ink hover:bg-cream-deep",
-  ghost: "text-green-600 hover:bg-green-50",
+  ghost: "text-ink-muted hover:bg-green-50 hover:text-green-600",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -24,6 +24,19 @@ const sizeClasses: Record<ButtonSize, string> = {
   md: "h-10 px-4 text-sm",
   lg: "h-11 px-5 text-base",
 };
+
+/** Shared class string for Button and Link-styled CTAs. */
+export function buttonClassName({
+  variant = "primary",
+  size = "md",
+  className,
+}: {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  className?: string;
+} = {}) {
+  return cn(baseClasses, variantClasses[variant], sizeClasses[size], className);
+}
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -40,12 +53,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         type={type}
-        className={cn(
-          baseClasses,
-          variantClasses[variant],
-          sizeClasses[size],
-          className,
-        )}
+        className={buttonClassName({ variant, size, className })}
         {...props}
       />
     );

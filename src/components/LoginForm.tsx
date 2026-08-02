@@ -19,7 +19,17 @@ const DEMO_ACCOUNTS = [
   },
 ] as const;
 
-export function LoginForm() {
+/** Allow only same-origin relative paths (claim return, etc.). */
+function safeCallbackUrl(value: string | undefined | null): string | null {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return null;
+  return value;
+}
+
+export function LoginForm({
+  callbackUrl,
+}: {
+  callbackUrl?: string | null;
+} = {}) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,7 +62,9 @@ export function LoginForm() {
 
       const session = await getSession();
       const role = session?.user?.role;
-      const destination = role === "DONOR" ? "/donor" : "/explore";
+      const destination =
+        safeCallbackUrl(callbackUrl) ??
+        (role === "DONOR" ? "/donor" : "/explore");
       router.replace(destination);
       router.refresh();
     } catch {

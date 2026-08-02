@@ -2,6 +2,7 @@ export { Alert, type AlertProps, type AlertVariant } from "./alert";
 export { Badge, type BadgeProps, type BadgeVariant } from "./badge";
 export {
   Button,
+  buttonClassName,
   type ButtonProps,
   type ButtonSize,
   type ButtonVariant,
