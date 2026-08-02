@@ -63,6 +63,14 @@ export async function POST(request: Request) {
   }
 
   const bytes = Buffer.from(await image.arrayBuffer());
-  const result = await analyzeFoodImage(bytes, mimeType);
-  return NextResponse.json(result);
+  const result = await analyzeFoodImage(bytes, mimeType, {
+    userId: session.user.id,
+  });
+
+  const headers = new Headers();
+  if (result.rateLimited) {
+    headers.set("X-Vision-Rate-Limited", "1");
+  }
+
+  return NextResponse.json(result, { headers });
 }

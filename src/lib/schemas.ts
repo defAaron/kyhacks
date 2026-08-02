@@ -57,6 +57,8 @@ export const visionResultSchema = z.object({
   suggestedQuantity: z.number().int().positive(),
   confidence: z.number().min(0).max(1),
   offline: z.boolean(),
+  /** Set when Gemini was skipped to protect API budget. */
+  rateLimited: z.boolean().optional(),
 });
 
 export type VisionResult = z.infer<typeof visionResultSchema>;

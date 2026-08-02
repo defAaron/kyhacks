@@ -29,6 +29,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+.cursor/
 
 # env files (keep .env.example committed)
 .env
@@ -51,3 +52,6 @@ next-env.d.ts
 # local uploads (keep directory via .gitkeep)
 /public/uploads/*
 !/public/uploads/.gitkeep
+
+# persisted Gemini daily quota counters
+/.data/

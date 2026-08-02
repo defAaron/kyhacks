@@ -9,9 +9,11 @@ import {
   useState,
 } from "react";
 import { Alert, Badge, Button, Input, Textarea } from "@/components/ui";
+import { compressImageFile } from "@/lib/compress-image";
 import {
   FOOD_SAFETY_DISCLAIMER,
   VISION_OFFLINE_BANNER,
+  VISION_RATE_LIMIT_BANNER,
 } from "@/lib/listing-status";
 import type { VisionResult } from "@/lib/schemas";
 
@@ -74,15 +76,19 @@ export function NewListingForm() {
     if (!file) return;
 
     setError(null);
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
-    const url = URL.createObjectURL(file);
-    setPhotoFile(file);
-    setPreviewUrl(url);
     setAnalyzing(true);
 
     try {
+      // Phone camera JPEGs often exceed the 5MB API cap — compress first.
+      const compressed = await compressImageFile(file);
+
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      const url = URL.createObjectURL(compressed);
+      setPhotoFile(compressed);
+      setPreviewUrl(url);
+
       const form = new FormData();
-      form.append("image", file);
+      form.append("image", compressed);
       const res = await fetch("/api/vision/analyze", {
         method: "POST",
         body: form,
@@ -108,8 +114,12 @@ export function NewListingForm() {
       setAllergens(result.allergens.join(", "));
       setQuantity(String(result.suggestedQuantity));
       setStep("confirm");
-    } catch {
-      setError("Network error analyzing photo. Please try again.");
+    } catch (err) {
+      if (err instanceof TypeError) {
+        setError("Network error analyzing photo. Please try again.");
+      } else {
+        setError(err instanceof Error ? err.message : "Could not process photo.");
+      }
     } finally {
       setAnalyzing(false);
     }
@@ -207,8 +217,7 @@ export function NewListingForm() {
 
           {analyzing ? (
             <Alert variant="info" title="Analyzing photo…">
-              Identifying food, tags, and allergens. This may take a few
-              seconds.
+              Preparing your photo and identifying food, tags, and allergens.
             </Alert>
           ) : null}
         </section>
@@ -216,7 +225,11 @@ export function NewListingForm() {
 
       {step === "confirm" ? (
         <form onSubmit={onPublish} className="space-y-4" noValidate>
-          {vision?.offline ? (
+          {vision?.rateLimited ? (
+            <Alert variant="info" title="Vision rate limit — manual entry">
+              {vision.description?.trim() || VISION_RATE_LIMIT_BANNER}
+            </Alert>
+          ) : vision?.offline ? (
             <Alert variant="info" title="AI offline — manual entry">
               {VISION_OFFLINE_BANNER}
             </Alert>

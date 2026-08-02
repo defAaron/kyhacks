@@ -1,11 +1,12 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { visionResultSchema, type VisionResult } from "@/lib/schemas";
+import { tryConsumeVisionQuota } from "@/lib/vision-quota";
 
 /** Max upload size for vision analyze (TRD §5). */
 export const VISION_MAX_BYTES = 5 * 1024 * 1024;
 
-/** Gemini Flash multimodal model (TRD §2 / §6). */
-const GEMINI_VISION_MODEL = "gemini-2.0-flash";
+/** Gemini Flash multimodal model (gemini-2.0-flash shut down June 2026). */
+const GEMINI_VISION_MODEL = "gemini-2.5-flash";
 
 const VISION_PROMPT = `You classify leftover food photos for a food-rescue app.
 Return ONLY a single JSON object (no markdown, no commentary) with these exact keys:
@@ -18,23 +19,32 @@ Return ONLY a single JSON object (no markdown, no commentary) with these exact k
 
 Do not invent allergens you cannot see evidence for. Prefer conservative allergen lists.`;
 
+type OfflineOptions = {
+  rateLimited?: boolean;
+  description?: string;
+};
+
 /**
- * Heuristic offline result when GEMINI_API_KEY is missing or the model/parse fails.
+ * Heuristic offline result when GEMINI_API_KEY is missing, quota blocks a call,
+ * or the model/parse fails.
  * TRD §5 / §6: confidence 0, offline true, title from timestamp, empty allergens.
  */
-export function offlineVisionFallback(): VisionResult {
+export function offlineVisionFallback(options?: OfflineOptions): VisionResult {
   const stamp = new Date().toLocaleString("en-US", {
     dateStyle: "medium",
     timeStyle: "short",
   });
   return visionResultSchema.parse({
     title: `Surplus food item (${stamp})`,
-    description: "Manual entry — AI vision unavailable. Confirm details before publishing.",
+    description:
+      options?.description ??
+      "Manual entry — AI vision unavailable. Confirm details before publishing.",
     categories: ["prepared"],
     allergens: [],
     suggestedQuantity: 1,
     confidence: 0,
     offline: true,
+    ...(options?.rateLimited ? { rateLimited: true } : {}),
   });
 }
 
@@ -52,15 +62,37 @@ function extractJsonObject(text: string): unknown {
 
 /**
  * Analyze a food image with Gemini Vision, validated via Zod.
- * Missing key, API errors, or parse/schema failures → offline fallback.
+ * Missing key, rate limit, API errors, or parse/schema failures → offline fallback.
+ * Quota is consumed only when a Gemini request is about to be sent.
  */
 export async function analyzeFoodImage(
   imageBytes: Buffer | Uint8Array,
   mimeType: string,
+  options?: { userId?: string },
 ): Promise<VisionResult> {
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) {
     return offlineVisionFallback();
+  }
+
+  const userId = options?.userId?.trim();
+  if (!userId) {
+    // Refuse anonymous Gemini spend — route must pass authenticated donor id.
+    console.warn("[vision] missing userId; skipping Gemini");
+    return offlineVisionFallback({
+      rateLimited: true,
+      description:
+        "Vision unavailable for this session. Enter details manually before publishing.",
+    });
+  }
+
+  const quota = tryConsumeVisionQuota(userId);
+  if (!quota.allowed) {
+    console.warn("[vision] quota denied", quota.reason, quota.message);
+    return offlineVisionFallback({
+      rateLimited: true,
+      description: quota.message,
+    });
   }
 
   try {
@@ -86,16 +118,25 @@ export async function analyzeFoodImage(
 
     const text = result.response.text();
     const raw = extractJsonObject(text);
+    const rawObj =
+      typeof raw === "object" && raw !== null
+        ? { ...(raw as Record<string, unknown>) }
+        : {};
+    delete rawObj.rateLimited;
+    delete rawObj.offline;
+
     const parsed = visionResultSchema.safeParse({
-      ...(typeof raw === "object" && raw !== null ? raw : {}),
+      ...rawObj,
       offline: false,
     });
 
     if (!parsed.success) {
+      console.warn("[vision] schema validation failed", parsed.error.flatten());
       return offlineVisionFallback();
     }
     return parsed.data;
-  } catch {
+  } catch (err) {
+    console.warn("[vision] Gemini analyze failed; using offline fallback", err);
     return offlineVisionFallback();
   }
 }

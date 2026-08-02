@@ -31,9 +31,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${fraunces.variable} ${sourceSans.variable} antialiased`}
+        suppressHydrationWarning
       >
         <Providers>
           <AppHeader />
