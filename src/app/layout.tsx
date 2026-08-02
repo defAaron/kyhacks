@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Source_Sans_3 } from "next/font/google";
+import { AppHeader } from "@/components/AppHeader";
+import { Providers } from "@/components/Providers";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -33,7 +35,10 @@ export default function RootLayout({
       <body
         className={`${fraunces.variable} ${sourceSans.variable} antialiased`}
       >
-        {children}
+        <Providers>
+          <AppHeader />
+          {children}
+        </Providers>
       </body>
     </html>
   );

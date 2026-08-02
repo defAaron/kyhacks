@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  DONOR
+  RECIPIENT
+}
+
+enum ListingStatus {
+  AVAILABLE
+  FULLY_CLAIMED
+  EXPIRED
+  HANDED_OFF
+}
+
+enum ClaimStatus {
+  RESERVED
+  PICKED_UP
+  NO_SHOW
+  CANCELLED
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  name         String?
+  passwordHash String
+  role         Role          @default(RECIPIENT)
+  donorProfile DonorProfile?
+  claims       Claim[]
+}
+
+model DonorProfile {
+  id       String    @id @default(cuid())
+  userId   String    @unique
+  user     User      @relation(fields: [userId], references: [id])
+  orgName  String
+  address  String
+  lat      Float
+  lng      Float
+  phone    String?
+  listings Listing[]
+}
+
+model Listing {
+  id                String        @id @default(cuid())
+  donorId           String
+  donor             DonorProfile  @relation(fields: [donorId], references: [id])
+  photoUrl          String
+  title             String
+  description       String?
+  categories        String // JSON array string (SQLite)
+  allergens         String // JSON array string
+  quantityAvailable Int
+  quantityClaimed   Int           @default(0)
+  pickupStart       DateTime
+  pickupEnd         DateTime
+  status            ListingStatus @default(AVAILABLE)
+  visionRaw         String? // JSON of model response
+  claims            Claim[]
+  createdAt         DateTime      @default(now())
+}
+
+model Claim {
+  id        String      @id @default(cuid())
+  listingId String
+  listing   Listing     @relation(fields: [listingId], references: [id])
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  portions  Int
+  status    ClaimStatus @default(RESERVED)
+  createdAt DateTime    @default(now())
+}

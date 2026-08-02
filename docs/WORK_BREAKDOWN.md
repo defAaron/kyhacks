@@ -231,15 +231,15 @@ When done: list files changed, how to verify, and any blockers.
 
 | Section | Status |
 |---|---|
-| S1 Foundation | done (Wave 0 complete) |
-| S2 Auth | not started |
+| S1 Foundation | done |
+| S2 Auth | done |
 | S3 Shell / design | not started |
-| S4 Data layer | not started |
-| S5 Listings API | not started |
-| S6 Vision API | not started |
-| S7 Claims API | not started |
+| S4 Data layer | done (Prisma + seed + Zod schemas; auth wired to DB/bcrypt) |
+| S5 Listings API | done (GET/POST, detail, expiry, storage) |
+| S6 Vision API | done (analyze + offline fallback) |
+| S7 Claims API | done (create/list/patch; no oversell) |
 | S8 Donor UI | not started |
 | S9 Explore UI | not started |
 | S10 Detail + claim UI | not started |
-| S11 Route optimize | not started |
+| S11 Route optimize | API done (S11.1–S11.2); UI (S11.3) not started |
 | S12 Polish + README | not started |
