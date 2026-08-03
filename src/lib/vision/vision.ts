@@ -28,6 +28,21 @@ type VisionGlobal = typeof globalThis & {
   __surplusFoodClassifierPromise?: Promise<Classifier>;
 };
 
+function isServerlessRuntime(): boolean {
+  return Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+}
+
+/**
+ * Model weights need a writable cache. Vercel/Lambda ship a read-only
+ * `/var/task` tree — only `/tmp` is writable there.
+ */
+function resolveTransformersCacheDir(): string {
+  if (isServerlessRuntime()) {
+    return path.join("/tmp", "surpluslink-transformers");
+  }
+  return path.join(process.cwd(), ".cache", "transformers");
+}
+
 /**
  * Heuristic offline result when the local model fails to load/run,
  * or rate limits block a call.
@@ -59,23 +74,33 @@ async function getFoodClassifier(): Promise<Classifier> {
   }
   if (!g.__surplusFoodClassifierPromise) {
     g.__surplusFoodClassifierPromise = (async () => {
-      const cacheDir = path.join(process.cwd(), ".cache", "transformers");
+      const cacheDir = resolveTransformersCacheDir();
       mkdirSync(cacheDir, { recursive: true });
 
       const { env, pipeline } = await import("@huggingface/transformers");
       env.cacheDir = cacheDir;
       env.allowLocalModels = true;
+      // Serverless: prefer WASM — native onnxruntime-node is unreliable in Lambda.
       if (env.backends.onnx?.wasm) {
         env.backends.onnx.wasm.proxy = false;
+        if (isServerlessRuntime()) {
+          env.backends.onnx.wasm.numThreads = 1;
+        }
       }
 
-      console.info("[vision] loading local Food-101 model", FOOD101_MODEL);
+      console.info(
+        "[vision] loading local Food-101 model",
+        FOOD101_MODEL,
+        "cache=",
+        cacheDir,
+      );
       const classifier = (await pipeline(
         "image-classification",
         FOOD101_MODEL,
         {
           // Quantized weights keep first-download size / RAM reasonable.
           dtype: "q8",
+          ...(isServerlessRuntime() ? { device: "wasm" as const } : {}),
         },
       )) as unknown as Classifier;
 

@@ -30,7 +30,7 @@ Or push to the connected GitHub branch if Git integration is enabled.
 
 - **DB:** Vercel cannot reliably use Supabase direct IPv6-only hosts. Always set `DATABASE_URL` to the **pooler**.
 - **Uploads:** On Vercel (`VERCEL=1`), photos are stored as **data URLs** in Postgres (see `src/lib/storage.ts`). Locally they write to `public/uploads/`.
-- **Vision:** Food-101 ONNX may fall back to offline/manual entry on serverless (cold start / binary limits). Listing still works.
+- **Vision:** Food-101 caches under `/tmp` on Vercel (read-only `/var/task`). First cold call downloads ~90MB weights and may be slow; warm instances reuse the cache. If load still fails, donors get offline/manual entry — listing still works.
 - **Auth middleware:** Edge-safe config in `src/lib/auth/auth.config.ts` (no Prisma/bcrypt in the Edge bundle).
 - **Demo users:** `donor@demo.com` / `recipient@demo.com` / `donor2@demo.com` — password `demo1234`
 
