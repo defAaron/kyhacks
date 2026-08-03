@@ -29,7 +29,8 @@ Open [http://localhost:3000](http://localhost:3000).
 
 | Variable | Required | Notes |
 |---|---|---|
-| `DATABASE_URL` | Yes | Default `file:./dev.db` (SQLite under `prisma/`) |
+| `DATABASE_URL` | Yes | Supabase Postgres URI (pooler recommended on Vercel) |
+| `DIRECT_URL` | Yes | Supabase direct DB URI (for Prisma migrate/push) |
 | `AUTH_SECRET` | Yes | Long random string for Auth.js sessions |
 | `AUTH_URL` | No | Defaults via Auth.js; use `http://localhost:3000` locally if needed |
 | `NEXT_PUBLIC_DEFAULT_CITY_LAT` | No | Default `38.2527` (Louisville) |

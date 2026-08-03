@@ -107,8 +107,12 @@ function readDailyUsage(): DailyUsage {
 }
 
 function writeDailyUsage(usage: DailyUsage): void {
-  mkdirSync(USAGE_DIR, { recursive: true });
-  writeFileSync(USAGE_FILE, `${JSON.stringify(usage, null, 2)}\n`, "utf8");
+  try {
+    mkdirSync(USAGE_DIR, { recursive: true });
+    writeFileSync(USAGE_FILE, `${JSON.stringify(usage, null, 2)}\n`, "utf8");
+  } catch {
+    // Serverless FS may be read-only; in-memory limits still apply for the instance.
+  }
 }
 
 function denial(

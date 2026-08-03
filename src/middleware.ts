@@ -1,10 +1,12 @@
-import { auth } from "@/lib/auth";
+import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
+import { authConfig } from "@/lib/auth.config";
 
 /**
- * Protect /donor/* with Auth.js session (JWT on the edge).
- * Matcher keeps public routes (/, /login, /explore, /api/auth/*) untouched.
+ * Edge-safe donor gate — uses JWT session only (no Prisma/bcrypt bundle).
  */
+const { auth } = NextAuth(authConfig);
+
 export default auth((req) => {
   const session = req.auth;
   const { pathname } = req.nextUrl;

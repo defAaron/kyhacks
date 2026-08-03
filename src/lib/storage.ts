@@ -22,14 +22,39 @@ function extensionFor(file: File): string {
   }
 }
 
+function mimeFor(file: File): string {
+  if (file.type) return file.type;
+  switch (extensionFor(file)) {
+    case ".jpg":
+    case ".jpeg":
+      return "image/jpeg";
+    case ".png":
+      return "image/png";
+    case ".webp":
+      return "image/webp";
+    case ".gif":
+      return "image/gif";
+    default:
+      return "application/octet-stream";
+  }
+}
+
 /**
- * Persist an uploaded file under `public/uploads` and return its public URL path.
- * Abstracted so Vercel Blob (or similar) can replace the local write later.
+ * Persist an uploaded file and return a public URL (path or data URL).
+ * - Local/dev: write under `public/uploads`
+ * - Vercel/serverless: store as a data URL (ephemeral FS is not durable)
  */
 export async function saveUpload(file: File): Promise<string> {
+  const buffer = Buffer.from(await file.arrayBuffer());
+
+  // On Vercel the filesystem is read-only except /tmp and does not persist.
+  if (process.env.VERCEL === "1" || process.env.UPLOAD_STRATEGY === "data-url") {
+    const mime = mimeFor(file);
+    return `data:${mime};base64,${buffer.toString("base64")}`;
+  }
+
   const filename = `${randomUUID()}${extensionFor(file)}`;
   await mkdir(UPLOAD_DIR, { recursive: true });
-  const buffer = Buffer.from(await file.arrayBuffer());
   await writeFile(path.join(UPLOAD_DIR, filename), buffer);
   return `/uploads/${filename}`;
 }

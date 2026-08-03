@@ -56,3 +56,4 @@ next-env.d.ts
 # persisted vision daily quota counters + local model cache
 /.data/
 /.cache/
+.env*

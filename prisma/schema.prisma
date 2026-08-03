@@ -3,8 +3,11 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  // Supabase Postgres (and local Postgres). SQLite file: URLs are no longer used.
+  // On Vercel prefer the Transaction pooler URI; set DIRECT_URL to the direct DB URI for migrations.
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum Role {
