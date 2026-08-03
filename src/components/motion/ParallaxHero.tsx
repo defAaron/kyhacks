@@ -46,8 +46,8 @@ export function ParallaxHero({ children }: ParallaxHeroProps) {
           height: reduceMotion ? "100dvh" : `calc(${scrollHeight}px + 70vh)`,
         }}
       >
-        {/* Sticky viewport: no overflow clip on the outer shell so hero text can fully paint */}
-        <div className="sticky top-[3.75rem] h-[calc(100dvh-3.75rem)] w-full bg-parchment">
+        {/* Sticky viewport stays under page sections (z-0) so landing content is never covered */}
+        <div className="sticky top-[3.75rem] z-0 h-[calc(100dvh-3.75rem)] w-full bg-parchment">
           {/* Media layer only — overflow + clip-path contain the zoom-in crop */}
           <motion.div
             className="absolute inset-0 overflow-hidden"
