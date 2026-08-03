@@ -80,12 +80,8 @@ async function getFoodClassifier(): Promise<Classifier> {
       const { env, pipeline } = await import("@huggingface/transformers");
       env.cacheDir = cacheDir;
       env.allowLocalModels = true;
-      // Serverless: prefer WASM — native onnxruntime-node is unreliable in Lambda.
       if (env.backends.onnx?.wasm) {
         env.backends.onnx.wasm.proxy = false;
-        if (isServerlessRuntime()) {
-          env.backends.onnx.wasm.numThreads = 1;
-        }
       }
 
       console.info(
@@ -94,13 +90,14 @@ async function getFoodClassifier(): Promise<Classifier> {
         "cache=",
         cacheDir,
       );
+      // Node/Vercel exposes onnxruntime-node as "cpu" (not browser "wasm").
       const classifier = (await pipeline(
         "image-classification",
         FOOD101_MODEL,
         {
           // Quantized weights keep first-download size / RAM reasonable.
           dtype: "q8",
-          ...(isServerlessRuntime() ? { device: "wasm" as const } : {}),
+          device: "cpu",
         },
       )) as unknown as Classifier;
 
