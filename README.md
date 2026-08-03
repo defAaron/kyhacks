@@ -1,25 +1,29 @@
 # SurplusLink
 
-Mobile-friendly Next.js app that connects restaurants and pantries with people nearby who can claim edible surplus before it expires. Donors photograph leftovers; a **free local Food-101** classifier (ONNX via `@huggingface/transformers`) suggests title, categories, allergen heuristics, and quantity — with offline / rate-limit fallback if the model is unavailable. Recipients browse a map, claim portions, and optimize a multi-stop pickup run.
+Mobile-friendly Next.js app connecting restaurants and pantries with people nearby who can claim edible surplus before it expires.
 
-**Hackathon demo (KYHacks):** Louisville default map center. MVP docs: [PRD](./docs/PRD.md) · [TRD](./docs/TRD.md) · [Work breakdown](./docs/WORK_BREAKDOWN.md).
+Donors photograph leftovers; a **free local Food-101** classifier (ONNX via `@huggingface/transformers`) suggests listing details (with offline / rate-limit fallback). Recipients browse a map, claim portions, and optimize a multi-stop pickup run.
+
+**Live:** [https://kyhacks.vercel.app](https://kyhacks.vercel.app)  
+**Stack:** Next.js 15 · Prisma · **Supabase Postgres** · Auth.js · Food-101 ONNX · Leaflet · OSRM · **Vercel**
+
+Docs: [docs/](./docs/README.md) · [PRD](./docs/product/PRD.md) · [TRD](./docs/product/TRD.md) · [Supabase](./docs/setup/SUPABASE.md) · [Deploy](./docs/setup/DEPLOYMENT.md)
 
 ---
 
-## Quick start (fresh clone)
+## Quick start
 
 ```bash
-git clone <repo-url> kyhacks
+git clone https://github.com/defAaron/kyhacks.git
 cd kyhacks
 npm install
 
 cp .env.example .env
-# Set AUTH_SECRET (required). Vision runs locally — no paid API key.
-# Example: openssl rand -base64 32
+# Set DATABASE_URL + DIRECT_URL (Supabase) and AUTH_SECRET
+# See docs/setup/SUPABASE.md
 
 npx prisma db push
 npm run db:seed
-
 npm run dev
 ```
 
@@ -29,15 +33,12 @@ Open [http://localhost:3000](http://localhost:3000).
 
 | Variable | Required | Notes |
 |---|---|---|
-| `DATABASE_URL` | Yes | Supabase Postgres URI (pooler recommended on Vercel) |
-| `DIRECT_URL` | Yes | Supabase direct DB URI (for Prisma migrate/push) |
-| `AUTH_SECRET` | Yes | Long random string for Auth.js sessions |
-| `AUTH_URL` | No | Defaults via Auth.js; use `http://localhost:3000` locally if needed |
-| `NEXT_PUBLIC_DEFAULT_CITY_LAT` | No | Default `38.2527` (Louisville) |
-| `NEXT_PUBLIC_DEFAULT_CITY_LNG` | No | Default `-85.7585` |
-| `VISION_*` quotas | No | Optional CPU rate limits for local Food-101 vision |
-
-See `.env.example` and [TRD §10](./docs/TRD.md).
+| `DATABASE_URL` | Yes | Supabase **Transaction pooler** URI |
+| `DIRECT_URL` | Yes | Supabase **direct** URI (Prisma push) |
+| `AUTH_SECRET` | Yes | `openssl rand -base64 32` |
+| `AUTH_URL` | Prod | `https://kyhacks.vercel.app` locally `http://localhost:3000` |
+| `NEXT_PUBLIC_DEFAULT_CITY_LAT/LNG` | No | Louisville defaults |
+| `VISION_*` | No | Local Food-101 CPU quotas |
 
 ### Scripts
 
@@ -45,49 +46,56 @@ See `.env.example` and [TRD §10](./docs/TRD.md).
 |---|---|
 | `npm run dev` | Dev server (Turbopack) |
 | `npm run build` / `npm start` | Production build & serve |
-| `npx prisma db push` | Apply schema to SQLite |
-| `npm run db:seed` | Idempotent demo users + listings |
+| `npx prisma db push` | Apply schema to Supabase |
+| `npm run db:seed` | Demo users + Louisville listings |
 | `npm run lint` | ESLint |
 
 ---
 
 ## Demo logins
 
-Password for all demo accounts: **`demo1234`**
+Password for all: **`demo1234`**
 
-| Role | Email | Use |
-|---|---|---|
-| Donor | `donor@demo.com` | Profile, camera listing, inbox |
-| Donor (2nd stop) | `donor2@demo.com` | Extra listings for multi-stop routing |
-| Recipient | `recipient@demo.com` | Explore, claim, pickup run |
-
-Seed creates Louisville-area listings with pickup windows relative to seed time so the board is not empty on first run.
+| Role | Email |
+|---|---|
+| Donor | `donor@demo.com` |
+| Donor (2nd stop) | `donor2@demo.com` |
+| Recipient | `recipient@demo.com` |
 
 ---
 
 ## 3-minute demo path
 
-1. **Explore (public)** — Open `/explore`. Confirm seed listings on the list and map (Louisville). Note remaining portions and pickup windows on cards.
-2. **Donor listing** — Login as `donor@demo.com` → Donor → New listing. Capture or upload a food photo. Confirm/edit AI fields (first photo may take longer while the local Food-101 model downloads). Set pickup window + quantity → Publish.
-3. **Claim** — Logout → login as `recipient@demo.com` → open a listing → claim 1+ portions. Confirm under **Claims**.
-4. **Pickup run (optional, ~30s)** — Claim a second listing (or use seed listings from both donors). On Claims, select ≥2 stops → optimize route → show ordered stops / map polyline.
-5. **Expiry (optional)** — Listings past `pickupEnd` flip to `EXPIRED` (on read / expire helper) and are not claimable in the UI.
+1. **Explore** — `/explore` seed listings on map + list (Louisville).  
+2. **Donor listing** — `donor@demo.com` → New listing → photo → confirm AI fields → publish.  
+3. **Claim** — `recipient@demo.com` → claim portions → **Claims**.  
+4. **Pickup run** — claim a second stop → optimize route.  
+5. **Expiry** — past `pickupEnd` → not claimable.
 
-**Vision:** local Food-101 ONNX (`onnx-community/swin-finetuned-food101-ONNX`) via `@huggingface/transformers` — free, no cloud API key. Weights cache under `.cache/transformers` after first download. Load failure, low confidence, or `VISION_*` quota → offline / rate-limit manual-entry banner. Allergen fields are label heuristics; staff must confirm.
+**Vision:** local Food-101 ONNX. On Vercel, offline/manual entry may appear if the model cannot load — listing still works.
+
+---
+
+## Project structure
+
+```text
+src/
+  app/                 # routes + API
+  components/
+    home/ explore/ listings/ donor/ auth/ layout/ motion/ ui/
+  lib/
+    auth/ db/ vision/ routing/   # domain modules + barrels
+    schemas.ts storage.ts …
+docs/
+  product/ setup/ engineering/
+prisma/                # schema + seed (Postgres)
+```
 
 ---
 
 ## Disclaimer
 
-- Donors remain responsible for food handling and safety. SurplusLink is a coordination tool, not a certification or medical service.
-- Allergen suggestions from Vision are assistive — staff must confirm before publish.
-- Public explore does not expose recipient identity. Donor phone is shown only after a successful claim.
-- Good Samaritan / surplus-share framing: this is a demo for sharing surplus, not a guarantee of fitness for consumption.
-
----
-
-## Stack (summary)
-
-Next.js 15 (App Router) · React 19 · TypeScript · Tailwind · Prisma + SQLite · Auth.js (Credentials) · Local Food-101 vision (transformers.js) · Leaflet / OSM · OSRM routing
-
-Full contracts and data model: [docs/TRD.md](./docs/TRD.md).
+- Donors remain responsible for food handling and safety.  
+- Allergen suggestions are assistive — staff must confirm.  
+- Public explore does not expose recipient identity.  
+- Coordination tool for surplus-share demos, not a certification service.

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ClaimsClient } from "@/app/claims/ClaimsClient";
-import { requireSession } from "@/lib/session";
+import { requireSession } from "@/lib/auth/session";
 
 export const metadata: Metadata = {
   title: "My claims",

@@ -4,8 +4,8 @@ import { visionResultSchema, type VisionResult } from "@/lib/schemas";
 import {
   visionResultFromFood101,
   type FoodPrediction,
-} from "@/lib/food101-map";
-import { tryConsumeVisionQuota } from "@/lib/vision-quota";
+} from "./food101-map";
+import { tryConsumeVisionQuota } from "./vision-quota";
 
 /** Max upload size for vision analyze (TRD §5). */
 export const VISION_MAX_BYTES = 5 * 1024 * 1024;

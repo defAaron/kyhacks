@@ -13,8 +13,8 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import type { ListingDto } from "@/lib/listing-dto";
-import { DEFAULT_MAP_CENTER } from "@/lib/map-center";
+import type { ListingDto } from "@/lib/db/listing-dto";
+import { DEFAULT_MAP_CENTER } from "@/lib/routing/map-center";
 
 export type ListingsMapMarker = {
   id: string;

@@ -1,5 +1,5 @@
 import { ListingStatus } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "./prisma";
 
 /**
  * Flip listings whose pickup window has ended to EXPIRED (TRD §5 / PRD §8).

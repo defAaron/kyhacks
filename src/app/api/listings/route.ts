@@ -1,10 +1,10 @@
 import { ListingStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { expireStaleListings } from "@/lib/expiry";
-import { haversineMeters } from "@/lib/geo";
-import { toListingDto } from "@/lib/listing-dto";
-import { prisma } from "@/lib/prisma";
+import { expireStaleListings } from "@/lib/db/expiry";
+import { haversineMeters } from "@/lib/routing/geo";
+import { toListingDto } from "@/lib/db/listing-dto";
+import { prisma } from "@/lib/db/prisma";
 import { listingCreateSchema } from "@/lib/schemas";
 import { saveUpload } from "@/lib/storage";
 

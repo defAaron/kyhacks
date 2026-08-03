@@ -9,12 +9,12 @@ import {
   useState,
 } from "react";
 import { Alert, Badge, Button, Input, Textarea } from "@/components/ui";
-import { compressImageFile } from "@/lib/compress-image";
+import { compressImageFile } from "@/lib/vision/compress-image";
 import {
   FOOD_SAFETY_DISCLAIMER,
   VISION_OFFLINE_BANNER,
   VISION_RATE_LIMIT_BANNER,
-} from "@/lib/listing-status";
+} from "@/lib/db/listing-status";
 import type { VisionResult } from "@/lib/schemas";
 
 type Step = "capture" | "confirm";

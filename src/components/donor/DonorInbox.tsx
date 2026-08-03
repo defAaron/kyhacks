@@ -2,12 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ListingStatusBadge } from "@/components/ListingStatusBadge";
+import { ListingStatusBadge } from "@/components/listings/ListingStatusBadge";
 import { Alert, Badge, Button } from "@/components/ui";
 import {
   formatPickupWindow,
   getListingAvailability,
-} from "@/lib/listing-status";
+} from "@/lib/db/listing-status";
 
 export type InboxClaim = {
   id: string;

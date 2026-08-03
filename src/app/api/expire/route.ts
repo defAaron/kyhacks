@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { expireStaleListings } from "@/lib/expiry";
+import { expireStaleListings } from "@/lib/db/expiry";
 
 export const runtime = "nodejs";
 

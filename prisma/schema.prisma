@@ -3,8 +3,7 @@ generator client {
 }
 
 datasource db {
-  // Supabase Postgres (and local Postgres). SQLite file: URLs are no longer used.
-  // On Vercel prefer the Transaction pooler URI; set DIRECT_URL to the direct DB URI for migrations.
+  // Supabase Postgres: DATABASE_URL = Transaction pooler; DIRECT_URL = direct (prisma db push).
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
@@ -58,7 +57,7 @@ model Listing {
   photoUrl          String
   title             String
   description       String?
-  categories        String // JSON array string (SQLite)
+  categories        String // JSON array string
   allergens         String // JSON array string
   quantityAvailable Int
   quantityClaimed   Int           @default(0)

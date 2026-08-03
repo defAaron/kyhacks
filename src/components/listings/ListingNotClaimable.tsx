@@ -2,7 +2,7 @@ import { Alert } from "@/components/ui";
 import {
   getListingAvailability,
   type ListingAvailabilityInput,
-} from "@/lib/listing-status";
+} from "@/lib/db/listing-status";
 
 export type ListingNotClaimableProps = {
   listing: ListingAvailabilityInput;

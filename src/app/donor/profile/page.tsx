@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { DonorProfileForm } from "@/components/donor/DonorProfileForm";
 import { DonorSubnav } from "@/components/donor/DonorSubnav";
-import { prisma } from "@/lib/prisma";
-import { requireDonor } from "@/lib/session";
+import { prisma } from "@/lib/db/prisma";
+import { requireDonor } from "@/lib/auth/session";
 
 export const metadata: Metadata = {
   title: "Donor profile",

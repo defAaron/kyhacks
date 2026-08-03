@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { ClaimStatus, ListingStatus, Prisma } from "@prisma/client";
 import { auth } from "@/lib/auth";
-import { toListingDto } from "@/lib/listing-dto";
-import { prisma } from "@/lib/prisma";
+import { toListingDto } from "@/lib/db/listing-dto";
+import { prisma } from "@/lib/db/prisma";
 import { claimStatusPatchSchema } from "@/lib/schemas";
 
 type RouteContext = {

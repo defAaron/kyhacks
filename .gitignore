@@ -43,11 +43,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# prisma / sqlite
+# local sqlite leftovers (legacy)
 *.db
 *.db-journal
-/prisma/*.db
-/prisma/*.db-journal
 
 # local uploads (keep directory via .gitkeep)
 /public/uploads/*
@@ -56,4 +54,3 @@ next-env.d.ts
 # persisted vision daily quota counters + local model cache
 /.data/
 /.cache/
-.env*

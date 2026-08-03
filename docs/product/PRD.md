@@ -1,10 +1,12 @@
 # SurplusLink — Product Requirements Document (PRD)
 
-**Version:** 1.1  
-**Status:** MVP complete (KYHacks demo)  
+**Version:** 1.2  
+**Status:** MVP complete · deployed  
 **Product name:** SurplusLink  
 **Platform:** Next.js mobile-friendly web app  
+**Production:** [https://kyhacks.vercel.app](https://kyhacks.vercel.app)  
 **Vision:** Local Food-101 classifier (`@huggingface/transformers` / ONNX) — free, no cloud API key  
+**Data:** Supabase Postgres (Prisma)  
 
 ---
 
@@ -28,6 +30,7 @@ A mobile-friendly web app where:
 - Clear dual personas: **Restaurant (Donor)** and **Recipient**
 - Real computer-vision value (local Food-101 ONNX), with graceful offline / rate-limit fallback — no paid vision API
 - Privacy-respecting: no recipient PII on the public board beyond claim status
+- Deployed demo on Vercel with hosted Postgres (Supabase)
 
 ## 4. Non-goals (v1)
 
@@ -40,7 +43,8 @@ A mobile-friendly web app where:
 - Push notifications / SMS
 - Admin moderation console
 - Stripe / donations
-- Cloud vision APIs (Gemini, etc.) — intentionally replaced by free local CV
+- Cloud vision APIs (Gemini, etc.) — replaced by free local CV
+- Supabase Auth / Storage (Postgres only for MVP)
 
 ## 5. Personas
 
@@ -63,7 +67,7 @@ A mobile-friendly web app where:
 ### Recipient
 
 - As a recipient, I browse a live dashboard of available surplus (list + map).
-- As a recipient, I filter by distance, pickup window, category, and allergens to avoid.
+- As a recipient, I filter by distance, text query, and allergens to avoid.
 - As a recipient, I claim N portions (atomic decrement of inventory).
 - As a recipient, I cancel a claim and restore stock if the listing is still active.
 - As a recipient, I add multiple claims to a “pickup run” and get an optimized route + stop order.
@@ -79,72 +83,68 @@ Recipient: Claim portions → Build pickup run → Optimize route → Navigate s
 
 ## 8. Functional requirements
 
-1. **Auth / roles:** Users sign in and act as `DONOR` or `RECIPIENT` (demo accounts; role fixed per seeded user).
+1. **Auth / roles:** Users sign in as `DONOR` or `RECIPIENT` (seeded demo accounts).
 2. **Donor profile:** org name, address, coordinates, contact phone (phone shown only after claim).
 3. **Listing creation:** image upload → local Vision analysis → editable fields → publish.
-4. **Listing fields:** photo URL, title, description, categories[], allergens[], quantityAvailable, quantityClaimed, pickupStart, pickupEnd, status (`AVAILABLE` | `FULLY_CLAIMED` | `EXPIRED` | `HANDED_OFF`), donorId; location inherited from donor.
-5. **Public dashboard:** cards + map pins for `AVAILABLE` listings within active pickup windows (or starting soon).
-6. **Claim:** recipient claims 1..N portions; stock decrements transactionally; claim record created.
+4. **Listing fields:** photo URL (or data URL in production), title, description, categories[], allergens[], quantityAvailable, quantityClaimed, pickupStart, pickupEnd, status, donorId; location inherited from donor.
+5. **Public dashboard:** cards + map pins for `AVAILABLE` listings within active pickup windows.
+6. **Claim:** recipient claims 1..N portions; stock decrements transactionally.
 7. **Claim cancel:** recipient can set `CANCELLED`; stock restored if listing still active.
-8. **Pickup run / routing:** select 2+ claims → nearest-neighbor / 2-opt order from user geolocation → polyline + stop list via OSRM (straight-line fallback if OSRM down).
-9. **Expiry:** listings past `pickupEnd` auto-flip to `EXPIRED` (on read + lightweight API/cron route).
+8. **Pickup run / routing:** select 2+ claims → nearest-neighbor / 2-opt → polyline via OSRM (straight-line fallback).
+9. **Expiry:** listings past `pickupEnd` auto-flip to `EXPIRED` (on read + expire route).
 10. **Donor fulfillment:** mark claim `PICKED_UP` or `NO_SHOW`.
 
 ## 9. UX requirements
 
 - Mobile-first; restaurant flow optimized for phone camera.
-- First useful screen for recipients = map/feed of food available now — not a marketing landing wall of stats.
-- Brand-forward name **SurplusLink** as hero on marketing/home; app screens prioritize task UI.
+- Marketing home: brand-first hero, then problem → solution → how-it-works (interactive architecture pipeline) → FAQ → CTA.
 - Pickup window and remaining portions always visible on cards.
-- Loading / error / empty states for Vision and maps; first Vision call may be slower while the ONNX model downloads into `.cache/transformers`.
-- Offline / rate-limit banners when classification is skipped: “AI offline — manual entry” / rate-limit copy.
-- Accessibility: large tap targets, sufficient contrast, alt text on food images.
-- Visual direction: warm food-rescue aesthetic (greens/amber/cream textures). Avoid purple-gradient “AI default,” dark neon glow, or generic system fonts as the primary brand voice.
+- Offline / rate-limit banners when classification is skipped.
+- Warm food-rescue aesthetic (greens/amber/parchment). Avoid purple-gradient “AI default.”
 
 ## 10. MVP screens (shipped)
 
-1. Home / role gate (brand hero + CTAs)
-2. Donor: profile setup
-3. Donor: new listing (camera → review → publish)
-4. Donor: my listings + claims inbox
-5. Recipient: explore (map + list + filters)
-6. Recipient: listing detail → claim
-7. Recipient: my claims / pickup run + route
-8. Login (demo credentials)
+1. Home / marketing + architecture FAQ  
+2. Login (demo credentials)  
+3. Donor: profile setup  
+4. Donor: new listing (camera → review → publish)  
+5. Donor: my listings + claims inbox  
+6. Recipient: explore (map + list + filters)  
+7. Recipient: listing detail → claim  
+8. Recipient: my claims / pickup run + route  
 
 ## 11. Success metrics (demo)
 
-- Time from photo to published listing &lt; 30s after model warm (first classify may be longer while weights download)
-- Claim succeeds without oversell under concurrent demo clicks
-- Route for 3 stops returns ordered itinerary &lt; 2s
-- Judges understand value without narration beyond 30s
-- Demo works with zero cloud vision keys
+- Time from photo to published listing &lt; 30s after model warm  
+- Claim succeeds without oversell  
+- Route for 3 stops returns ordered itinerary &lt; 2s  
+- Production site serves seed listings from Supabase Postgres  
 
 ## 12. Risks and mitigations
 
 | Risk | Mitigation |
 |---|---|
-| Food safety liability perception | Copy: donors remain responsible; surplus-share / Good Samaritan framing; no medical claims |
-| Vision mislabels allergens | Allergens are **heuristic from dish label**, not visual detection; always human-confirm; field editable and highlighted |
-| Low-confidence / non-food photo | Reject low scores → offline manual entry |
-| Oversell | DB transaction / conditional update on quantity |
-| Local model slow or fails to load | Offline fallback + banner; model cached after first download |
-| Vision CPU abuse on shared demo host | Per-user / global `VISION_*` rate limits → manual entry when capped |
-| Map API cost | Leaflet + OSM tiles + public OSRM |
+| Food safety liability | Donors remain responsible; Good Samaritan framing |
+| Vision mislabels allergens | Heuristics from dish label; always human-confirm |
+| Oversell | DB transaction on claim |
+| Local model slow / fails on Vercel | Offline fallback + banner |
+| Supabase IPv6-only direct host | Use Transaction pooler for `DATABASE_URL` on Vercel |
+| Vision CPU abuse | `VISION_*` rate limits |
 
 ## 13. Copy / trust notes
 
 - Public board does not expose recipient identity.
 - Donor contact phone is revealed only after a successful claim.
 - Allergen suggestions are assistive, not guarantees — staff must confirm.
-- Disclaimer on listing/publish: food handling remains the donor’s responsibility.
+- Disclaimer: food handling remains the donor’s responsibility.
 
-## 14. Product decisions (resolved for MVP)
+## 14. Product decisions (MVP)
 
-- Product name: **SurplusLink** (working title kept for demo).
-- Pantries use the same donor profile/org type as restaurants in v1.
-- Claim cancellation by recipients is in MVP (restores stock if listing still active).
-- Vision: free local Food-101 ONNX via Hugging Face transformers.js — no Gemini / cloud vision billing.
+- Product name: **SurplusLink**
+- Pantries use the same donor profile type as restaurants
+- Claim cancellation is in MVP
+- Vision: free local Food-101 ONNX — no Gemini
+- Hosting: Vercel + Supabase Postgres
 
 ---
 

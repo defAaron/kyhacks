@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
-import { authConfig } from "@/lib/auth.config";
+import { authConfig } from "@/lib/auth/auth.config";
 
 /**
  * Edge-safe donor gate — uses JWT session only (no Prisma/bcrypt bundle).

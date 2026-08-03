@@ -54,9 +54,9 @@ const stages: Stage[] = [
   {
     id: "persist",
     label: "Persist",
-    short: "SQLite + photo file",
-    tech: "Prisma · public/uploads",
-    body: "The listing and visionRaw JSON land in SQLite. The photo is stored under public/uploads and linked by URL for the public board.",
+    short: "Postgres + photo",
+    tech: "Prisma · Supabase Postgres",
+    body: "The listing and visionRaw JSON land in Supabase Postgres. Locally the photo is stored under public/uploads; on Vercel it is persisted as a data URL.",
   },
   {
     id: "publish",

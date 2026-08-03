@@ -6,9 +6,9 @@ import {
 } from "@/components/donor/DonorInbox";
 import { DonorSubnav } from "@/components/donor/DonorSubnav";
 import { Alert } from "@/components/ui";
-import { expireStaleListings } from "@/lib/expiry";
-import { prisma } from "@/lib/prisma";
-import { requireDonor } from "@/lib/session";
+import { expireStaleListings } from "@/lib/db/expiry";
+import { prisma } from "@/lib/db/prisma";
+import { requireDonor } from "@/lib/auth/session";
 
 export const metadata: Metadata = {
   title: "Donor inbox",

@@ -2,7 +2,7 @@ import {
   estimateDurationSeconds,
   haversineMeters,
   type LatLng,
-} from "@/lib/geo";
+} from "./geo";
 
 export type RouteStop = LatLng & { id: string };
 

@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { expireStaleListings } from "@/lib/expiry";
-import { ACTIVE_CLAIM_STATUSES, toListingDto } from "@/lib/listing-dto";
-import { prisma } from "@/lib/prisma";
+import { expireStaleListings } from "@/lib/db/expiry";
+import { ACTIVE_CLAIM_STATUSES, toListingDto } from "@/lib/db/listing-dto";
+import { prisma } from "@/lib/db/prisma";
 
 export const runtime = "nodejs";
 

@@ -4,14 +4,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { FormEvent, useMemo, useState } from "react";
-import { ListingNotClaimable } from "@/components/ListingNotClaimable";
-import { NetworkErrorAlert } from "@/components/NetworkErrorAlert";
+import { ListingNotClaimable } from "@/components/listings/ListingNotClaimable";
+import { NetworkErrorAlert } from "@/components/layout/NetworkErrorAlert";
 import { Alert, Button } from "@/components/ui";
-import type { ListingDto } from "@/lib/listing-dto";
+import type { ListingDto } from "@/lib/db/listing-dto";
 import {
   FOOD_SAFETY_DISCLAIMER,
   getListingAvailability,
-} from "@/lib/listing-status";
+} from "@/lib/db/listing-status";
 
 export type ClaimFormProps = {
   listing: ListingDto;

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ExploreBoard } from "@/components/ExploreBoard";
+import { ExploreBoard } from "@/components/explore/ExploreBoard";
 
 export const metadata: Metadata = {
   title: "Explore",

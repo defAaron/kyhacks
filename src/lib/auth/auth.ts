@@ -1,8 +1,8 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/prisma";
-import { authConfig } from "@/lib/auth.config";
+import { prisma } from "@/lib/db/prisma";
+import { authConfig } from "./auth.config";
 import type { Role } from "@/types/next-auth";
 
 type AuthUserRecord = {

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Figtree } from "next/font/google";
-import { AppHeader } from "@/components/AppHeader";
-import { Providers } from "@/components/Providers";
+import { AppHeader } from "@/components/layout/AppHeader";
+import { Providers } from "@/components/layout/Providers";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 

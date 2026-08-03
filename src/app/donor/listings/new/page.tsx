@@ -3,8 +3,8 @@ import Link from "next/link";
 import { DonorSubnav } from "@/components/donor/DonorSubnav";
 import { NewListingForm } from "@/components/donor/NewListingForm";
 import { Alert } from "@/components/ui";
-import { prisma } from "@/lib/prisma";
-import { requireDonor } from "@/lib/session";
+import { prisma } from "@/lib/db/prisma";
+import { requireDonor } from "@/lib/auth/session";
 
 export const metadata: Metadata = {
   title: "New listing",

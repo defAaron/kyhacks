@@ -8,20 +8,20 @@ import {
   useState,
   type FormEvent,
 } from "react";
-import { ListingStatusBadge } from "@/components/ListingStatusBadge";
-import type { ListingDto } from "@/lib/listing-dto";
+import { ListingStatusBadge } from "@/components/listings/ListingStatusBadge";
+import type { ListingDto } from "@/lib/db/listing-dto";
 import {
   formatPickupWindow,
   getListingAvailability,
-} from "@/lib/listing-status";
-import { DEFAULT_MAP_CENTER } from "@/lib/map-center";
-import { NetworkErrorAlert } from "@/components/NetworkErrorAlert";
+} from "@/lib/db/listing-status";
+import { DEFAULT_MAP_CENTER } from "@/lib/routing/map-center";
+import { NetworkErrorAlert } from "@/components/layout/NetworkErrorAlert";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const ListingsMap = dynamic(() => import("@/components/ListingsMap"), {
+const ListingsMap = dynamic(() => import("@/components/explore/ListingsMap"), {
   ssr: false,
   loading: () => (
     <div

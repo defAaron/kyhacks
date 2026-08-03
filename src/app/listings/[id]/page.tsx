@@ -2,17 +2,17 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ClaimForm } from "@/components/ClaimForm";
-import { ListingStatusBadge } from "@/components/ListingStatusBadge";
+import { ClaimForm } from "@/components/listings/ClaimForm";
+import { ListingStatusBadge } from "@/components/listings/ListingStatusBadge";
 import { Badge } from "@/components/ui";
 import { auth } from "@/lib/auth";
-import { expireStaleListings } from "@/lib/expiry";
-import { toListingDto } from "@/lib/listing-dto";
+import { expireStaleListings } from "@/lib/db/expiry";
+import { toListingDto } from "@/lib/db/listing-dto";
 import {
   formatPickupWindow,
   getListingAvailability,
-} from "@/lib/listing-status";
-import { prisma } from "@/lib/prisma";
+} from "@/lib/db/listing-status";
+import { prisma } from "@/lib/db/prisma";
 
 type PageProps = {
   params: Promise<{ id: string }>;

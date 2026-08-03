@@ -3,11 +3,11 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Alert, Badge, Button } from "@/components/ui";
-import type { ListingDto } from "@/lib/listing-dto";
-import { DEFAULT_MAP_CENTER } from "@/lib/map-center";
+import type { ListingDto } from "@/lib/db/listing-dto";
+import { DEFAULT_MAP_CENTER } from "@/lib/routing/map-center";
 import type { RouteOptimizeResponse } from "@/lib/schemas";
 
-const ListingsMap = dynamic(() => import("@/components/ListingsMap"), {
+const ListingsMap = dynamic(() => import("@/components/explore/ListingsMap"), {
   ssr: false,
   loading: () => (
     <div
