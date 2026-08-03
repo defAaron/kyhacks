@@ -18,10 +18,10 @@ export function DonorSubnav({ current }: { current: string }) {
           <Link
             key={href}
             href={href}
-            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+            className={`rounded-xl px-3 py-2 text-sm font-medium transition-all duration-300 ${
               active
-                ? "bg-green-100 text-green-700"
-                : "text-ink-muted hover:bg-green-50 hover:text-green-600"
+                ? "bg-teal text-void"
+                : "text-ink-muted hover:bg-green-50 hover:text-mist"
             }`}
             aria-current={active ? "page" : undefined}
           >

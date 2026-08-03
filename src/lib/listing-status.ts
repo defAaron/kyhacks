@@ -159,4 +159,4 @@ export const VISION_OFFLINE_BANNER =
   "AI offline — manual entry. Suggestions are heuristic; confirm allergens and quantity before publishing.";
 
 export const VISION_RATE_LIMIT_BANNER =
-  "Vision rate limit reached — Gemini was not called. Enter details manually, or try again later.";
+  "Vision rate limit reached — local Food-101 was not run. Enter details manually, or try again later.";

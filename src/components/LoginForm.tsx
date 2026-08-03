@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { getSession, signIn } from "next-auth/react";
+import { Button, Input } from "@/components/ui";
 
 const DEMO_ACCOUNTS = [
   {
@@ -77,7 +78,7 @@ export function LoginForm({
     <div className="w-full max-w-md space-y-6">
       <form
         onSubmit={onSubmit}
-        className="space-y-4 rounded-2xl border border-border bg-surface/90 p-5 shadow-sm sm:p-6"
+        className="panel space-y-4 rounded-2xl p-5 sm:p-6"
         noValidate
       >
         <div className="space-y-1.5">
@@ -87,7 +88,7 @@ export function LoginForm({
           >
             Email
           </label>
-          <input
+          <Input
             id="email"
             name="email"
             type="email"
@@ -96,7 +97,6 @@ export function LoginForm({
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="min-h-11 w-full rounded-xl border border-border bg-cream px-3.5 py-2.5 text-base text-ink outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
             placeholder="you@example.com"
           />
         </div>
@@ -108,7 +108,7 @@ export function LoginForm({
           >
             Password
           </label>
-          <input
+          <Input
             id="password"
             name="password"
             type="password"
@@ -116,7 +116,6 @@ export function LoginForm({
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="min-h-11 w-full rounded-xl border border-border bg-cream px-3.5 py-2.5 text-base text-ink outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
             placeholder="••••••••"
           />
         </div>
@@ -130,28 +129,29 @@ export function LoginForm({
           </p>
         ) : null}
 
-        <button
+        <Button
           type="submit"
           disabled={pending}
-          className="min-h-11 w-full rounded-xl bg-green-600 px-4 py-2.5 text-base font-semibold text-cream transition hover:bg-green-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 disabled:cursor-not-allowed disabled:opacity-60"
+          size="lg"
+          className="w-full"
         >
           {pending ? "Signing in…" : "Sign in"}
-        </button>
+        </Button>
       </form>
 
       <section
         aria-labelledby="demo-accounts-heading"
-        className="rounded-2xl border border-amber-400/40 bg-cream-deep/60 p-4 sm:p-5"
+        className="rounded-2xl border border-gold/30 bg-gold/10 p-4 sm:p-5"
       >
         <h2
           id="demo-accounts-heading"
-          className="font-display text-lg text-green-700"
+          className="font-display text-lg text-mist"
         >
           Demo accounts
         </h2>
         <p className="mt-1 text-sm text-ink-muted">
           Tap an account to fill the form — password for both is{" "}
-          <code className="rounded bg-surface px-1.5 py-0.5 text-ink">
+          <code className="rounded-md bg-surface px-1.5 py-0.5 text-ink">
             demo1234
           </code>
           .
@@ -162,20 +162,20 @@ export function LoginForm({
               <button
                 type="button"
                 onClick={() => fillDemo(account)}
-                className="flex min-h-11 w-full items-start justify-between gap-3 rounded-xl border border-border bg-surface px-3.5 py-3 text-left transition hover:border-amber-500 hover:bg-cream focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
+                className="interactive-lift flex min-h-11 w-full items-start justify-between gap-3 rounded-xl border border-border bg-surface/80 px-3.5 py-3 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage"
               >
                 <span>
                   <span className="block text-sm font-semibold text-ink">
                     {account.label}
                   </span>
-                  <span className="mt-0.5 block font-mono text-sm text-green-600">
+                  <span className="mt-0.5 block font-mono text-sm text-teal">
                     {account.email}
                   </span>
                   <span className="mt-0.5 block text-xs text-ink-muted">
                     {account.hint}
                   </span>
                 </span>
-                <span className="shrink-0 self-center text-xs font-medium text-amber-600">
+                <span className="shrink-0 self-center text-xs font-medium text-gold">
                   Use
                 </span>
               </button>

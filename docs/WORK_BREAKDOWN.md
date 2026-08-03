@@ -2,7 +2,8 @@
 
 **Purpose:** Ordered build sections with subtasks sized for one subagent each.  
 **Source of truth:** [PRD.md](./PRD.md), [TRD.md](./TRD.md)  
-**Rule:** Do not start a section until its **Blocked by** items are done (or stubs exist).
+**Rule:** Do not start a section until its **Blocked by** items are done (or stubs exist).  
+**Status:** All sections S1–S12 complete for KYHacks MVP.
 
 ---
 
@@ -36,7 +37,7 @@ S1 Foundation
 | ID | Subtask | Deliverables | Notes for subagent |
 |---|---|---|---|
 | **S1.1** | Scaffold Next.js app | `package.json`, App Router, TypeScript, Tailwind, `src/app` layout | Next.js 15, React 19, `src/` directory. No business pages yet beyond a placeholder home. |
-| **S1.2** | Env + ignore + scripts | `.env.example`, `.gitignore`, npm scripts | Include `DATABASE_URL`, `AUTH_SECRET`, `GEMINI_API_KEY`, map center vars per TRD. |
+| **S1.2** | Env + ignore + scripts | `.env.example`, `.gitignore`, npm scripts | Include `DATABASE_URL`, `AUTH_SECRET`, optional `VISION_*` quotas, map center vars per TRD. No cloud vision key. |
 | **S1.3** | Base layout + fonts/CSS vars | `src/app/layout.tsx`, `globals.css` | Warm food-rescue tokens (not purple AI default). Brand name SurplusLink in metadata. |
 
 **Exit criteria:** `npm install && npm run dev` starts a blank branded shell.
@@ -78,7 +79,7 @@ S1 Foundation
 | ID | Subtask | Deliverables | Notes for subagent |
 |---|---|---|---|
 | **S4.1** | Prisma schema | `prisma/schema.prisma`, `src/lib/prisma.ts` | Exact models/enums from TRD §4. SQLite. |
-| **S4.2** | Migrate + seed | `prisma/seed.ts`, seed script in `package.json` | `donor@demo.com` / `recipient@demo.com` / `demo1234`; 1–2 donors; ≥3 listings with future pickup windows; Louisville coords. |
+| **S4.2** | Migrate + seed | `prisma/seed.ts`, seed script in `package.json` | `donor@demo.com` / `donor2@demo.com` / `recipient@demo.com` / `demo1234`; 2 donors; ≥3 listings with future pickup windows; Louisville coords. |
 | **S4.3** | Shared Zod types | `src/lib/schemas.ts` | Listing create, vision result, claim create, route-optimize request/response. |
 
 **Exit criteria:** `npx prisma db push && npm run db:seed` populates demo data.
@@ -106,11 +107,11 @@ S1 Foundation
 
 | ID | Subtask | Deliverables | Notes for subagent |
 |---|---|---|---|
-| **S6.1** | Gemini client + prompt | `src/lib/vision.ts` | Strict JSON → Zod; model flash vision. |
+| **S6.1** | Local Food-101 client | `src/lib/vision.ts`, `src/lib/food101-map.ts` | `@huggingface/transformers` ONNX image-classification; map labels → Zod vision result. No cloud key. |
 | **S6.2** | Analyze route | `src/app/api/vision/analyze/route.ts` | Multipart `image`, 5MB cap, donor auth. |
-| **S6.3** | Offline fallback | same modules | Missing key / parse fail → heuristic + `offline: true`, `confidence: 0`. |
+| **S6.3** | Offline + quota fallback | `vision.ts`, `vision-quota.ts` | Load/runtime/low-confidence fail → heuristic + `offline: true`, `confidence: 0`. Quota → `rateLimited`. |
 
-**Exit criteria:** POST image returns schema-valid JSON with or without `GEMINI_API_KEY`.
+**Exit criteria:** POST image returns schema-valid JSON with local Food-101 (or offline fallback) — no `GEMINI_API_KEY` required.
 
 ---
 
@@ -136,7 +137,7 @@ S1 Foundation
 |---|---|---|---|
 | **S8.1** | Donor profile page | `src/app/donor/profile/page.tsx` (+ API if needed) | Create/edit orgName, address, lat/lng, phone. Seed may already have profile. |
 | **S8.2** | New listing camera flow | `src/app/donor/listings/new/page.tsx` | `capture="environment"`; call vision analyze; editable fields; allergen highlight; pickup window; publish. |
-| **S8.3** | Donor inbox | `src/app/donor/page.tsx` | My listings + claims; mark picked up / no-show. Offline AI banner when vision returns `offline`. |
+| **S8.3** | Donor inbox | `src/app/donor/page.tsx` | My listings + claims; mark picked up / no-show. Offline / rate-limit AI banner when vision returns `offline` / `rateLimited`. |
 
 **Exit criteria:** Donor can photo → confirm → publish; listing appears in GET /api/listings.
 
@@ -194,9 +195,9 @@ S1 Foundation
 | **S12.1** | Expiry UX pass | listing cards + APIs | Expired not claimable; donor sees expired state. |
 | **S12.2** | Mobile QA pass | CSS/layout fixes | iPhone Safari camera input, tap targets, map height. |
 | **S12.3** | README + judge script | `README.md` | Setup, env, seed, 3-minute demo path, disclaimer copy. |
-| **S12.4** | Docs sync | touch PRD/TRD only if behavior drifted | Keep WORK_BREAKDOWN status notes optional. |
+| **S12.4** | Docs sync | PRD/TRD/WORK_BREAKDOWN | Local Food-101 vision; no Gemini; reflect shipped MVP. |
 
-**Exit criteria:** Fresh clone → seed → demo path works without Gemini key (offline vision).
+**Exit criteria:** Fresh clone → seed → demo path works with local Food-101 (or offline vision fallback); no cloud vision key required.
 
 ---
 
@@ -236,10 +237,10 @@ When done: list files changed, how to verify, and any blockers.
 | S3 Shell / design | done (UI primitives, AppHeader, brand home) |
 | S4 Data layer | done (Prisma + seed + Zod schemas; auth wired to DB/bcrypt) |
 | S5 Listings API | done (GET/POST, detail, expiry, storage) |
-| S6 Vision API | done (analyze + offline fallback) |
-| S7 Claims API | done (create/list/patch; no oversell) |
+| S6 Vision API | done (local Food-101 ONNX + offline / rate-limit fallback) |
+| S7 Claims API | done (create/list/patch; no oversell; cancel restores stock) |
 | S8 Donor UI | done (profile, new listing + camera/vision, inbox) |
 | S9 Explore UI | done (map + list + filters) |
 | S10 Detail + claim UI | done (detail, claim form, expired/sold-out states) |
 | S11 Route optimize | done (API + Claims pickup-run UI) |
-| S12 Polish + README | done (expiry UX helpers, mobile CSS, README, demo path) |
+| S12 Polish + README | done (expiry UX helpers, mobile CSS, README, demo path, docs sync) |

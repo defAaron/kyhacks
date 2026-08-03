@@ -1,8 +1,8 @@
 import { forwardRef, type ButtonHTMLAttributes } from "react";
-import { cn } from "./utils";
+import { cn } from "@/lib/utils";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost";
-export type ButtonSize = "sm" | "md" | "lg";
+export type ButtonVariant = "primary" | "secondary" | "ghost" | "default" | "outline" | "destructive";
+export type ButtonSize = "sm" | "md" | "lg" | "default" | "xs";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -10,19 +10,27 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const baseClasses =
-  "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 focus-visible:ring-offset-cream disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]";
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-green-600 text-surface hover:bg-green-700",
+  primary:
+    "bg-teal text-void shadow-[0_0_0_0_rgba(143,162,138,0.35)] hover:bg-green-600 hover:shadow-[0_8px_28px_rgba(143,162,138,0.35)]",
+  default:
+    "bg-teal text-void shadow-[0_0_0_0_rgba(143,162,138,0.35)] hover:bg-green-600 hover:shadow-[0_8px_28px_rgba(143,162,138,0.35)]",
   secondary:
-    "border border-border bg-surface text-ink hover:bg-cream-deep",
-  ghost: "text-ink-muted hover:bg-green-50 hover:text-green-600",
+    "border border-border bg-surface/90 text-ink hover:border-sage/50 hover:bg-sage-light/60",
+  outline:
+    "border border-border bg-transparent text-ink hover:border-gold/50 hover:bg-sage-light/40",
+  ghost: "text-ink-muted hover:bg-green-50 hover:text-mist",
+  destructive: "bg-danger/15 text-danger hover:bg-danger/25",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "h-8 px-3 text-sm",
-  md: "h-10 px-4 text-sm",
-  lg: "h-11 px-5 text-base",
+  xs: "h-7 px-2.5 text-xs",
+  sm: "h-9 min-h-9 px-3 text-sm",
+  md: "h-11 min-h-11 px-4 text-sm",
+  default: "h-11 min-h-11 px-4 text-sm",
+  lg: "h-12 min-h-12 px-6 text-base",
 };
 
 /** Shared class string for Button and Link-styled CTAs. */

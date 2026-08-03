@@ -70,7 +70,7 @@ export default async function DonorInboxPage() {
 
       <header className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="font-display text-3xl tracking-tight text-green-700">
+          <h1 className="font-display text-3xl tracking-tight text-mist">
             Donor inbox
           </h1>
           <p className="mt-2 text-sm text-ink-muted sm:text-base">
@@ -82,7 +82,7 @@ export default async function DonorInboxPage() {
         {profile ? (
           <Link
             href="/donor/listings/new"
-            className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-green-600 px-4 text-sm font-medium text-surface transition-colors hover:bg-green-700 sm:w-auto"
+            className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-teal px-4 text-sm font-medium text-void transition-all duration-300 hover:bg-green-600 hover:shadow-[0_8px_28px_rgba(143,162,138,0.35)] active:scale-[0.98] sm:w-auto"
           >
             New listing
           </Link>

@@ -1,8 +1,8 @@
 # SurplusLink
 
-Mobile-friendly Next.js app that connects restaurants and pantries with people nearby who can claim edible surplus before it expires. Donors photograph leftovers (local Food-101 vision suggests details, with offline fallback), publish a pickup window, and recipients browse a map, claim portions, and optimize a multi-stop pickup run.
+Mobile-friendly Next.js app that connects restaurants and pantries with people nearby who can claim edible surplus before it expires. Donors photograph leftovers; a **free local Food-101** classifier (ONNX via `@huggingface/transformers`) suggests title, categories, allergen heuristics, and quantity — with offline / rate-limit fallback if the model is unavailable. Recipients browse a map, claim portions, and optimize a multi-stop pickup run.
 
-**Hackathon demo (KYHacks):** Louisville default map center. Docs: [PRD](./docs/PRD.md) · [TRD](./docs/TRD.md) · [Work breakdown](./docs/WORK_BREAKDOWN.md).
+**Hackathon demo (KYHacks):** Louisville default map center. MVP docs: [PRD](./docs/PRD.md) · [TRD](./docs/TRD.md) · [Work breakdown](./docs/WORK_BREAKDOWN.md).
 
 ---
 
@@ -72,7 +72,7 @@ Seed creates Louisville-area listings with pickup windows relative to seed time 
 4. **Pickup run (optional, ~30s)** — Claim a second listing (or use seed listings from both donors). On Claims, select ≥2 stops → optimize route → show ordered stops / map polyline.
 5. **Expiry (optional)** — Listings past `pickupEnd` flip to `EXPIRED` (on read / expire helper) and are not claimable in the UI.
 
-**Vision:** runs on-device via `@huggingface/transformers` (Food-101 ONNX). No Gemini/cloud billing. If the model fails to load, donors still get an offline manual-entry fallback.
+**Vision:** local Food-101 ONNX (`onnx-community/swin-finetuned-food101-ONNX`) via `@huggingface/transformers` — free, no cloud API key. Weights cache under `.cache/transformers` after first download. Load failure, low confidence, or `VISION_*` quota → offline / rate-limit manual-entry banner. Allergen fields are label heuristics; staff must confirm.
 
 ---
 

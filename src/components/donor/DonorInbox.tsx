@@ -138,7 +138,7 @@ export function DonorInbox({ listings }: { listings: InboxListing[] }) {
           return (
             <li
               key={listing.id}
-              className="overflow-hidden rounded-xl border border-border bg-surface/90"
+              className="interactive-lift overflow-hidden rounded-2xl border border-border bg-surface/90"
             >
               <div className="flex flex-col gap-3 p-4 sm:flex-row sm:gap-4">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -149,7 +149,7 @@ export function DonorInbox({ listings }: { listings: InboxListing[] }) {
                 />
                 <div className="min-w-0 flex-1 space-y-1.5">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h2 className="font-display text-lg text-green-700">
+                    <h2 className="font-display text-lg text-mist">
                       {listing.title}
                     </h2>
                     <ListingStatusBadge listing={listing} />
@@ -168,7 +168,7 @@ export function DonorInbox({ listings }: { listings: InboxListing[] }) {
               </div>
 
               {listing.claims.length > 0 ? (
-                <div className="border-t border-border bg-cream/40 px-4 py-3">
+                <div className="border-t border-border bg-cream-deep/50 px-4 py-3">
                   <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-muted">
                     Claims
                   </h3>

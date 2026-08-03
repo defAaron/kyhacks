@@ -7,5 +7,9 @@ export {
   type ButtonSize,
   type ButtonVariant,
 } from "./button";
+export {
+  InteractiveHoverButton,
+  InteractiveHoverLink,
+} from "./interactive-hover-button";
 export { Input, type InputProps } from "./input";
 export { Textarea, type TextareaProps } from "./textarea";

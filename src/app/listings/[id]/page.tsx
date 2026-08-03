@@ -83,7 +83,7 @@ export default async function ListingDetailPage({ params }: PageProps) {
       </p>
 
       <article className="space-y-6">
-        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-border bg-cream-deep">
+        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-border bg-cream-deep">
           <Image
             src={listing.photoUrl}
             alt={listing.title}
@@ -97,7 +97,7 @@ export default async function ListingDetailPage({ params }: PageProps) {
 
         <header className="space-y-3">
           <div className="flex flex-wrap items-start justify-between gap-3">
-            <h1 className="font-display text-3xl tracking-tight text-green-700 sm:text-4xl">
+            <h1 className="font-display text-3xl tracking-tight text-mist sm:text-4xl">
               {listing.title}
             </h1>
             <ListingStatusBadge listing={listing} />
@@ -110,13 +110,13 @@ export default async function ListingDetailPage({ params }: PageProps) {
         </header>
 
         <dl className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border border-border bg-surface/80 px-4 py-3">
+          <div className="panel rounded-2xl px-4 py-3">
             <dt className="text-xs font-medium uppercase tracking-wide text-ink-muted">
               Pickup window
             </dt>
             <dd className="mt-1 text-base text-ink">{windowLabel}</dd>
           </div>
-          <div className="rounded-xl border border-border bg-surface/80 px-4 py-3">
+          <div className="panel rounded-2xl px-4 py-3">
             <dt className="text-xs font-medium uppercase tracking-wide text-ink-muted">
               Remaining
             </dt>

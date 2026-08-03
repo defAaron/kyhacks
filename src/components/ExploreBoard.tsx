@@ -25,7 +25,7 @@ const ListingsMap = dynamic(() => import("@/components/ListingsMap"), {
   ssr: false,
   loading: () => (
     <div
-      className="listings-map flex w-full items-center justify-center rounded-xl border border-border bg-cream-deep/60 text-sm text-ink-muted"
+      className="listings-map flex w-full items-center justify-center rounded-2xl border border-border bg-cream-deep/80 text-sm text-ink-muted"
       aria-busy="true"
     >
       Loading map…
@@ -67,7 +67,7 @@ const initialFilters: Filters = {
 };
 
 function selectClassName() {
-  return "flex h-11 min-h-11 w-full rounded-lg border border-border bg-surface px-3 py-2 text-base text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 focus-visible:ring-offset-cream";
+  return "flex h-11 min-h-11 w-full rounded-xl border border-border bg-cream-deep px-3 py-2 text-base text-ink transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 }
 
 export function ExploreBoard() {
@@ -152,7 +152,7 @@ export function ExploreBoard() {
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6 sm:px-6 sm:py-8">
       <header className="space-y-2">
-        <h1 className="font-display text-3xl tracking-tight text-green-700 sm:text-4xl">
+        <h1 className="font-display text-3xl tracking-tight text-mist sm:text-4xl">
           Explore
         </h1>
         <p className="max-w-xl text-ink-muted">
@@ -163,7 +163,7 @@ export function ExploreBoard() {
 
       <section
         aria-label="Filters"
-        className="space-y-4 rounded-xl border border-border bg-surface/80 p-4 sm:p-5"
+        className="panel space-y-4 rounded-2xl p-4 sm:p-5"
       >
         <form
           onSubmit={applySearch}
@@ -215,8 +215,8 @@ export function ExploreBoard() {
                   aria-pressed={active}
                   className={
                     active
-                      ? "inline-flex min-h-11 items-center rounded-lg border border-danger/40 bg-danger/10 px-3 py-2 text-sm font-medium capitalize text-danger transition-colors"
-                      : "inline-flex min-h-11 items-center rounded-lg border border-border bg-cream px-3 py-2 text-sm font-medium capitalize text-ink-muted transition-colors hover:border-green-500 hover:text-green-600"
+                      ? "inline-flex min-h-11 items-center rounded-xl border border-danger/40 bg-danger/10 px-3 py-2 text-sm font-medium capitalize text-danger transition-all duration-300"
+                      : "inline-flex min-h-11 items-center rounded-xl border border-border bg-cream-deep px-3 py-2 text-sm font-medium capitalize text-ink-muted transition-all duration-300 hover:border-teal hover:text-mist"
                   }
                 >
                   {allergen}
@@ -261,7 +261,7 @@ export function ExploreBoard() {
 
         <section aria-label="Available listings" className="space-y-3">
           <div className="flex items-baseline justify-between gap-2">
-            <h2 className="font-display text-xl text-green-700">
+            <h2 className="font-display text-xl text-mist">
               Available now
             </h2>
             <p className="text-sm text-ink-muted" aria-live="polite">
@@ -297,21 +297,21 @@ export function ExploreBoard() {
                       onFocus={() => setSelectedId(listing.id)}
                       className={
                         selected
-                          ? "flex min-h-[5.5rem] gap-3 rounded-xl border border-green-500 bg-surface p-3 transition-colors outline-none ring-2 ring-green-500/30 sm:gap-4 sm:p-4"
-                          : "flex min-h-[5.5rem] gap-3 rounded-xl border border-border bg-surface p-3 transition-colors hover:border-green-500/60 hover:bg-cream/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 sm:gap-4 sm:p-4"
+                          ? "interactive-lift flex min-h-[5.5rem] gap-3 rounded-2xl border border-teal bg-surface p-3 outline-none ring-2 ring-teal/35 sm:gap-4 sm:p-4"
+                          : "interactive-lift flex min-h-[5.5rem] gap-3 rounded-2xl border border-border bg-surface/90 p-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal sm:gap-4 sm:p-4"
                       }
                     >
-                      <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-cream-deep sm:h-24 sm:w-24">
+                      <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-cream-deep sm:h-24 sm:w-24">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={listing.photoUrl}
                           alt=""
-                          className="h-full w-full object-cover"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>
                       <div className="min-w-0 flex-1 space-y-1.5">
                         <div className="flex flex-wrap items-start justify-between gap-2">
-                          <h3 className="font-display text-lg leading-snug text-green-700">
+                          <h3 className="font-display text-lg leading-snug text-mist">
                             {listing.title}
                           </h3>
                           <ListingStatusBadge listing={listing} />

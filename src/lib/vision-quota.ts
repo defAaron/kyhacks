@@ -120,8 +120,8 @@ function denial(
 }
 
 /**
- * Reserve one Gemini Vision call for `userId`.
- * Call this only when an API key is present and you are about to hit Gemini.
+ * Reserve one local Food-101 vision call for `userId`.
+ * Call before loading/running the classifier (CPU guard).
  * Peeks all limits first, then commits — so a failed check does not burn budget.
  */
 export function tryConsumeVisionQuota(userId: string): VisionQuotaResult {

@@ -47,8 +47,8 @@ function stopIcon(order: number) {
     html: `<div style="
       display:flex;align-items:center;justify-content:center;
       width:28px;height:28px;border-radius:9999px;
-      background:#2f5430;color:#fffaf2;font:600 13px/1 Source Sans 3,system-ui,sans-serif;
-      border:2px solid #fffaf2;box-shadow:0 1px 4px rgba(31,42,28,0.35);
+      background:#8FA28A;color:#F7F4ED;font:600 13px/1 Figtree,system-ui,sans-serif;
+      border:2px solid #F7F4ED;box-shadow:0 2px 8px rgba(47,56,44,0.2);
     ">${order}</div>`,
     iconSize: [28, 28],
     iconAnchor: [14, 14],
@@ -57,14 +57,14 @@ function stopIcon(order: number) {
 }
 
 function pinIcon(selected: boolean) {
-  const bg = selected ? "#2f5430" : "#c8892d";
+  const bg = selected ? "#8FA28A" : "#C8A96B";
   const size = selected ? 18 : 14;
   return L.divIcon({
     className: "surpluslink-map-pin",
     html: `<div style="
       width:${size}px;height:${size}px;border-radius:9999px;
-      background:${bg};border:2px solid #fffaf2;
-      box-shadow:0 1px 4px rgba(31,42,28,0.35);
+      background:${bg};border:2px solid #F7F4ED;
+      box-shadow:0 2px 8px rgba(47,56,44,0.2);
     "></div>`,
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
@@ -156,8 +156,8 @@ export default function ListingsMap({
         aria-label="Map of surplus food locations"
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
         <MapBounds positions={boundPositions} />
 
@@ -166,9 +166,9 @@ export default function ListingsMap({
             center={[origin.lat, origin.lng]}
             radius={8}
             pathOptions={{
-              color: "#244226",
-              fillColor: "#3f6b3a",
-              fillOpacity: 0.9,
+              color: "#C8A96B",
+              fillColor: "#8FA28A",
+              fillOpacity: 0.95,
               weight: 2,
             }}
           >
@@ -180,9 +180,9 @@ export default function ListingsMap({
           <Polyline
             positions={polylineLatLngs}
             pathOptions={{
-              color: "#2f5430",
+              color: "#8FA28A",
               weight: 4,
-              opacity: 0.85,
+              opacity: 0.9,
             }}
           />
         ) : null}
@@ -205,7 +205,7 @@ export default function ListingsMap({
               <Popup>
                 {listing ? (
                   <div className="space-y-1 text-sm text-ink">
-                    <p className="font-medium text-green-700">{listing.title}</p>
+                    <p className="font-medium text-mist">{listing.title}</p>
                     <p className="text-ink-muted">{listing.donor.orgName}</p>
                     <p>
                       {listing.remainingPortions} portion

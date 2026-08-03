@@ -31,7 +31,7 @@ export default async function DonorProfilePage() {
       <DonorSubnav current="/donor/profile" />
 
       <header className="mb-6">
-        <h1 className="font-display text-3xl tracking-tight text-green-700">
+        <h1 className="font-display text-3xl tracking-tight text-mist">
           Donor profile
         </h1>
         <p className="mt-2 text-sm text-ink-muted sm:text-base">
@@ -41,7 +41,7 @@ export default async function DonorProfilePage() {
         </p>
       </header>
 
-      <div className="rounded-2xl border border-border bg-surface/90 p-5 sm:p-6">
+      <div className="panel rounded-2xl p-5 sm:p-6">
         <DonorProfileForm initial={initial} isNew={!profile} />
       </div>
     </main>

@@ -18,7 +18,7 @@ export default async function ClaimsPage() {
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <header className="mb-8">
-        <h1 className="font-display text-3xl tracking-tight text-green-700 sm:text-4xl">
+        <h1 className="font-display text-3xl tracking-tight text-mist sm:text-4xl">
           My claims
         </h1>
         <p className="mt-2 max-w-xl text-sm text-ink-muted sm:text-base">

@@ -291,7 +291,7 @@ export function ClaimsClient() {
           <div>
             <h2
               id="my-claims-heading"
-              className="font-display text-xl text-green-700"
+              className="font-display text-xl text-mist"
             >
               My claims
             </h2>
@@ -318,7 +318,7 @@ export function ClaimsClient() {
             Claim portions from Explore, then build a pickup run here.
           </Alert>
         ) : (
-          <ul className="divide-y divide-border rounded-xl border border-border bg-surface">
+          <ul className="panel divide-y divide-border rounded-2xl">
             {claims.map((claim) => {
               const selectable = claim.status === "RESERVED";
               const checked = selectedIds.has(claim.id);
@@ -326,12 +326,12 @@ export function ClaimsClient() {
                 <li key={claim.id}>
                   <label
                     className={`flex cursor-pointer gap-3 px-4 py-3 transition-colors ${
-                      selectable ? "hover:bg-green-50/60" : "opacity-70"
-                    } ${checked ? "bg-green-50/80" : ""}`}
+                      selectable ? "hover:bg-green-50" : "opacity-70"
+                    } ${checked ? "bg-green-50" : ""}`}
                   >
                     <input
                       type="checkbox"
-                      className="mt-1 size-4 accent-green-600"
+                      className="mt-1 size-4 accent-teal"
                       checked={checked}
                       disabled={!selectable}
                       onChange={() => toggleClaim(claim.id)}
@@ -377,7 +377,7 @@ export function ClaimsClient() {
           <div>
             <h2
               id="pickup-run-heading"
-              className="font-display text-xl text-green-700"
+              className="font-display text-xl text-mist"
             >
               Pickup run
             </h2>
@@ -431,9 +431,9 @@ export function ClaimsClient() {
               </p>
             </div>
 
-            <ol className="space-y-2 rounded-xl border border-border bg-surface p-4">
+            <ol className="panel space-y-2 rounded-2xl p-4">
               <li className="flex gap-3 text-sm text-ink-muted">
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-green-100 text-xs font-semibold text-green-700">
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-green-100 text-xs font-semibold text-mist">
                   ●
                 </span>
                 <span>
@@ -443,7 +443,7 @@ export function ClaimsClient() {
               </li>
               {orderedStops.map(({ claim, order, legSeconds }, idx) => (
                 <li key={claim.id} className="flex gap-3">
-                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-green-600 text-xs font-semibold text-surface">
+                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-teal text-xs font-semibold text-void">
                     {order}
                   </span>
                   <div className="min-w-0 flex-1">

@@ -1,48 +1,99 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Warm food-rescue palette */
-  --cream: #f7f1e6;
-  --cream-deep: #efe4d2;
-  --green-50: #eef5ea;
-  --green-100: #d8e8cf;
-  --green-500: #3f6b3a;
-  --green-600: #2f5430;
-  --green-700: #244226;
-  --amber-400: #e0a84a;
-  --amber-500: #c8892d;
-  --amber-600: #a46c1c;
-  --ink: #1f2a1c;
-  --ink-muted: #5c6658;
-  --surface: #fffaf2;
-  --border: #d9cbb4;
-  --danger: #b1432f;
-  --success: #3f6b3a;
+  /* Brand palette */
+  --parchment: #f7f4ed;
+  --sage: #8fa28a;
+  --sage-light: #c7d3c0;
+  --gold: #c8a96b;
 
-  --background: var(--cream);
-  --foreground: var(--ink);
+  /* Aliases used across components */
+  --void: #f7f4ed;
+  --forest: #c7d3c0;
+  --teal: #8fa28a;
+  --mist: #5c6e58;
+
+  /* App semantic tokens */
+  --cream: #f7f4ed;
+  --cream-deep: #ebe6d9;
+  --green-50: color-mix(in srgb, var(--sage) 12%, var(--parchment));
+  --green-100: color-mix(in srgb, var(--sage) 28%, var(--parchment));
+  --green-500: #8fa28a;
+  --green-600: #7a8f74;
+  --green-700: #5c6e58;
+  --amber-400: #d4bc88;
+  --amber-500: #c8a96b;
+  --amber-600: #b39355;
+  --ink: #2f382c;
+  --ink-muted: #6a7464;
+  --surface: #fffcf6;
+  --danger: #b85c4a;
+  --success: #8fa28a;
+
+  /* shadcn tokens */
+  --background: #f7f4ed;
+  --foreground: #2f382c;
+  --card: #fffcf6;
+  --card-foreground: #2f382c;
+  --popover: #fffcf6;
+  --popover-foreground: #2f382c;
+  --primary: #8fa28a;
+  --primary-foreground: #f7f4ed;
+  --secondary: #c7d3c0;
+  --secondary-foreground: #2f382c;
+  --muted: color-mix(in srgb, var(--sage-light) 55%, var(--parchment));
+  --muted-foreground: #6a7464;
+  --accent: #c8a96b;
+  --accent-foreground: #2f382c;
+  --destructive: #b85c4a;
+  --border: color-mix(in srgb, var(--sage) 28%, transparent);
+  --input: color-mix(in srgb, var(--sage) 22%, transparent);
+  --ring: #8fa28a;
+  --radius: 0.75rem;
+
+  --chart-1: #8fa28a;
+  --chart-2: #c8a96b;
+  --chart-3: #c7d3c0;
+  --chart-4: #7a8f74;
+  --chart-5: #b39355;
+
+  --sidebar: #fffcf6;
+  --sidebar-foreground: #2f382c;
+  --sidebar-primary: #8fa28a;
+  --sidebar-primary-foreground: #f7f4ed;
+  --sidebar-accent: #c7d3c0;
+  --sidebar-accent-foreground: #2f382c;
+  --sidebar-border: color-mix(in srgb, var(--sage) 24%, transparent);
+  --sidebar-ring: #8fa28a;
 
   --background-gradient: linear-gradient(
       165deg,
-      #faf6ee 0%,
-      #f3ead8 42%,
-      #e8f0e3 100%
+      #f7f4ed 0%,
+      #f2efe6 42%,
+      #e8efe4 100%
     ),
     radial-gradient(
-      ellipse 80% 50% at 10% 0%,
-      rgba(216, 232, 207, 0.55),
-      transparent 55%
+      ellipse 70% 55% at 12% 0%,
+      rgba(143, 162, 138, 0.22),
+      transparent 58%
     ),
     radial-gradient(
-      ellipse 60% 40% at 90% 10%,
-      rgba(224, 168, 74, 0.14),
-      transparent 50%
+      ellipse 55% 45% at 92% 8%,
+      rgba(200, 169, 107, 0.16),
+      transparent 52%
     );
 
   --pattern-dots: radial-gradient(
-    rgba(47, 84, 48, 0.06) 0.7px,
+    rgba(143, 162, 138, 0.12) 0.7px,
     transparent 0.7px
   );
+
+  --tap-min: 2.75rem;
+  --map-min-height: min(55dvh, 28rem);
 }
 
 @theme inline {
@@ -64,46 +115,100 @@
   --color-border: var(--border);
   --color-danger: var(--danger);
   --color-success: var(--success);
-  --font-sans: var(--font-source-sans);
-  --font-display: var(--font-fraunces);
+  --color-void: var(--void);
+  --color-forest: var(--forest);
+  --color-teal: var(--teal);
+  --color-mist: var(--mist);
+  --color-sage: var(--sage);
+  --color-sage-light: var(--sage-light);
+  --color-gold: var(--gold);
+  --color-parchment: var(--parchment);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --font-sans: var(--font-figtree);
+  --font-display: var(--font-bricolage);
+  --font-heading: var(--font-bricolage);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-body {
-  min-height: 100vh;
-  color: var(--foreground);
-  background-color: var(--background);
-  background-image: var(--pattern-dots), var(--background-gradient);
-  background-size: 18px 18px, auto, auto, auto;
-  background-attachment: fixed;
-  font-family: var(--font-source-sans), ui-sans-serif, sans-serif;
-  font-size: 1rem;
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    min-height: 100vh;
+    background-image: var(--pattern-dots), var(--background-gradient);
+    background-size: 20px 20px, auto, auto, auto;
+    background-attachment: fixed;
+    font-family: var(--font-figtree), ui-sans-serif, sans-serif;
+    font-size: 1rem;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  html {
+    @apply font-sans;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+    color: var(--mist);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+
+  a {
+    color: var(--teal);
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--sage-light) 70%, transparent);
+    color: var(--ink);
+  }
 }
 
-h1,
-h2,
-h3,
-.font-display {
-  font-family: var(--font-fraunces), ui-serif, Georgia, serif;
-  color: var(--green-700);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-
-a {
-  color: var(--green-600);
-}
-
-::selection {
-  background: var(--green-100);
-  color: var(--ink);
-}
-
-/* Leaflet: keep map under sticky header; brand-aligned popups */
+/* Leaflet */
 .leaflet-container {
   font: inherit;
   background: var(--cream-deep);
+  border-radius: 1rem;
 }
 
 .surplus-map-pin,
@@ -115,19 +220,29 @@ a {
 .leaflet-popup-content-wrapper {
   border-radius: 0.75rem;
   border: 1px solid var(--border);
-  box-shadow: 0 4px 16px rgba(31, 42, 28, 0.12);
+  box-shadow: 0 8px 24px rgba(47, 56, 44, 0.12);
+  background: var(--surface);
   color: var(--ink);
 }
 
 .leaflet-popup-tip {
+  background: var(--surface);
   box-shadow: none;
 }
 
-/* Home hero motion */
+.leaflet-control-attribution {
+  background: color-mix(in srgb, var(--parchment) 88%, transparent) !important;
+  color: var(--ink-muted) !important;
+}
+
+.leaflet-control-attribution a {
+  color: var(--sage) !important;
+}
+
 @keyframes surplus-fade-up {
   from {
     opacity: 0;
-    transform: translateY(0.75rem);
+    transform: translateY(1rem);
   }
   to {
     opacity: 1;
@@ -135,53 +250,44 @@ a {
   }
 }
 
-@keyframes surplus-hero-drift {
-  from {
-    transform: scale(1.04) translate3d(0, 0, 0);
+@keyframes surplus-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
   }
-  to {
-    transform: scale(1.1) translate3d(-1.5%, -1%, 0);
+  50% {
+    opacity: 0.75;
   }
 }
 
 .surplus-hero-enter {
   opacity: 0;
-  animation: surplus-fade-up 0.65s ease-out forwards;
+  animation: surplus-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .surplus-hero-enter-1 {
-  animation-delay: 0.1s;
+  animation-delay: 0.08s;
 }
 
 .surplus-hero-enter-2 {
-  animation-delay: 0.18s;
+  animation-delay: 0.16s;
 }
 
 .surplus-hero-enter-3 {
-  animation-delay: 0.28s;
+  animation-delay: 0.26s;
 }
 
-.surplus-hero-media {
-  animation: surplus-hero-drift 18s ease-in-out alternate infinite;
-  will-change: transform;
+.surplus-glow {
+  animation: surplus-glow-pulse 7s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .surplus-hero-enter {
+  .surplus-hero-enter,
+  .surplus-glow {
     animation: none;
     opacity: 1;
     transform: none;
   }
-
-  .surplus-hero-media {
-    animation: none;
-  }
-}
-
-/* Mobile QA (S12.2): comfortable tap targets, map plane, camera capture */
-:root {
-  --tap-min: 2.75rem; /* 44px */
-  --map-min-height: min(55dvh, 28rem);
 }
 
 .tap-target {
@@ -189,7 +295,6 @@ a {
   min-width: var(--tap-min);
 }
 
-/* Leaflet / explore map: fill a predictable height on phones */
 .listings-map,
 .leaflet-container.listings-map {
   width: 100%;
@@ -205,7 +310,6 @@ a {
   }
 }
 
-/* iPhone Safari: larger file control + avoid zoom-on-focus (<16px) */
 input[type="file"].camera-input {
   display: block;
   width: 100%;
@@ -227,11 +331,29 @@ input[type="file"].camera-input::file-selector-button {
   cursor: pointer;
 }
 
-/* Prevent iOS Safari zooming inputs on focus */
 @media (max-width: 767px) {
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
   select,
   textarea {
     font-size: max(1rem, 16px);
   }
+}
+
+.panel {
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 92%, var(--sage-light));
+  backdrop-filter: blur(10px);
+}
+
+.interactive-lift {
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.interactive-lift:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--sage) 55%, transparent);
+  box-shadow: 0 12px 28px rgba(47, 56, 44, 0.1);
 }

@@ -211,7 +211,7 @@ export function NewListingForm() {
               capture="environment"
               onChange={onPhotoSelected}
               disabled={analyzing}
-              className="camera-input block w-full text-ink file:mr-3 file:rounded-lg file:border-0 file:bg-green-600 file:px-4 file:py-2.5 file:text-sm file:font-medium file:text-surface hover:file:bg-green-700 disabled:opacity-60"
+              className="camera-input block w-full text-ink file:mr-3 file:rounded-xl file:border-0 file:bg-teal file:px-4 file:py-2.5 file:text-sm file:font-medium file:text-void hover:file:bg-green-600 disabled:opacity-60"
             />
           </label>
 

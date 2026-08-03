@@ -108,14 +108,14 @@ export function ClaimForm({
     return (
       <div className="space-y-4 rounded-xl border border-border bg-surface/90 p-4 sm:p-5">
         <div>
-          <h2 className="font-display text-xl text-green-700">Claim portions</h2>
+          <h2 className="font-display text-xl text-mist">Claim portions</h2>
           <p className="mt-1 text-sm text-ink-muted">
             Sign in to reserve pickup portions for this listing.
           </p>
         </div>
         <Link
           href={loginHref(listing.id)}
-          className="inline-flex h-11 w-full items-center justify-center rounded-lg bg-green-600 px-5 text-base font-medium text-surface transition-colors hover:bg-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 focus-visible:ring-offset-cream sm:w-auto"
+          className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-teal px-5 text-base font-medium text-void transition-all duration-300 hover:bg-green-600 hover:shadow-[0_8px_28px_rgba(143,162,138,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98] sm:w-auto"
         >
           Sign in to claim
         </Link>
@@ -171,7 +171,7 @@ export function ClaimForm({
   return (
     <div className="space-y-4 rounded-xl border border-border bg-surface/90 p-4 sm:p-5">
       <div>
-        <h2 className="font-display text-xl text-green-700">Claim portions</h2>
+        <h2 className="font-display text-xl text-mist">Claim portions</h2>
         <p className="mt-1 text-sm text-ink-muted">
           Reserve up to {maxPortions} portion{maxPortions === 1 ? "" : "s"} for
           pickup during the window.

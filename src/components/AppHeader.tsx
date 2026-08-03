@@ -74,11 +74,11 @@ export async function AppHeader() {
   const isLoggedIn = Boolean(session?.user);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-surface/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 border-b border-border/80 bg-parchment/85 backdrop-blur-xl">
       <div className="mx-auto flex h-[3.75rem] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link
           href="/"
-          className="font-display text-xl font-semibold tracking-tight text-green-700 transition-colors hover:text-green-600"
+          className="font-display text-xl font-semibold tracking-tight text-mist transition-colors hover:text-sage"
         >
           SurplusLink
         </Link>
@@ -92,12 +92,12 @@ export async function AppHeader() {
         </nav>
 
         <details className="group relative md:hidden">
-          <summary className="flex min-h-11 cursor-pointer list-none items-center rounded-lg border border-border bg-cream px-3 text-sm font-medium text-ink marker:content-none [&::-webkit-details-marker]:hidden">
+          <summary className="flex min-h-11 cursor-pointer list-none items-center rounded-xl border border-border bg-surface px-3 text-sm font-medium text-ink marker:content-none [&::-webkit-details-marker]:hidden">
             <span className="group-open:hidden">Menu</span>
             <span className="hidden group-open:inline">Close</span>
           </summary>
           <nav
-            className="absolute right-0 top-full z-50 mt-2 min-w-[12rem] rounded-lg border border-border bg-surface p-2 shadow-lg"
+            className="absolute right-0 top-full z-50 mt-2 min-w-[12rem] rounded-xl border border-border bg-surface p-2 shadow-xl shadow-ink/10 backdrop-blur-xl"
             aria-label="Mobile navigation"
           >
             <div className="flex flex-col gap-0.5">
