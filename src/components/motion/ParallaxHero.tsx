@@ -7,8 +7,8 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import Image from "next/image";
 import type { ReactNode } from "react";
+import { HeroNodeGraph } from "@/components/home/HeroNodeGraph";
 import { InteractiveHoverLink } from "@/components/ui/interactive-hover-button";
 import { buttonClassName } from "@/components/ui/button";
 import Link from "next/link";
@@ -61,15 +61,7 @@ export function ParallaxHero({ children }: ParallaxHeroProps) {
                   : { y: imageY, scale: imageScale }
               }
             >
-              <Image
-                src="/hero-food-map.svg"
-                alt=""
-                fill
-                priority
-                unoptimized
-                className="object-contain object-center"
-                sizes="100vw"
-              />
+              <HeroNodeGraph />
             </motion.div>
 
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-parchment via-parchment/70 to-parchment/10" />

@@ -281,9 +281,52 @@
   animation: surplus-glow-pulse 7s ease-in-out infinite;
 }
 
+@keyframes hero-graph-comet {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+@keyframes hero-graph-dash-crawl {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+
+@keyframes hero-graph-node-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.07);
+  }
+}
+
+.hero-graph-comet {
+  stroke-dasharray: 14 86;
+  animation: hero-graph-comet 3.8s linear infinite;
+}
+
+.hero-graph-dashes {
+  animation: hero-graph-dash-crawl 2.4s linear infinite;
+}
+
+.hero-graph-node {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hero-graph-node-breathe 3.6s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .surplus-hero-enter,
-  .surplus-glow {
+  .surplus-glow,
+  .hero-graph-comet,
+  .hero-graph-dashes,
+  .hero-graph-node {
     animation: none;
     opacity: 1;
     transform: none;
